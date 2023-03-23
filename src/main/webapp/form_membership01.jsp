@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원 가입</title>
+<title>회원 가입!</title>
 </head>
 <body>
 	Home > Join the Membership
