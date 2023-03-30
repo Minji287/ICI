@@ -7,7 +7,7 @@
 <title>!!!회원 로그인!!!</title>
 </head>
 <body>
-	<form action="loginOk.jsp">
+	<form action="loginOk.jsp" method="post">
 		아이디: <input type="text" name="memberId"><br><br>
 		비밀번호: <input type="password" name="memberPw"><br><br>
 		<input type="submit" value="로그인">
