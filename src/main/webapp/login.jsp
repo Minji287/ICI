@@ -9,6 +9,9 @@
 		if(document.loginForm.id.value.length < 4 || document.loginForm.id.value.length > 10) {
 			alert('아이디는 4~10자 사이여야 합니다!');
 			return false;
+		} else if(document.loginForm.pw.value.length < 4){
+			alert('비밀번호는 4자 이상이어야 합니다!');
+			return false;
 		} else {
 			return true;
 		}
