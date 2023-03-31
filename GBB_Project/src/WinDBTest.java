@@ -50,7 +50,7 @@ public class WinDBTest extends JDialog {
 					ResultSet rs = stmt.executeQuery(sql);
 					
 					while(rs.next()) {
-						System.out.println(rs.getString("addr"));
+						System.out.println(rs.getString("birthyear") + " " + rs.getString("addr"));
 					}
 					
 				} catch (ClassNotFoundException e1) {
