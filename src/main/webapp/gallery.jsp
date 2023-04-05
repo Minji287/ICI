@@ -7,6 +7,8 @@
 <title>gallery.jsp</title>
 </head>
 <body>
-	<img alt="" src="">
+	<jsp:include page="header.jsp"></jsp:include>
+	<img src="a.jpg">
+	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
