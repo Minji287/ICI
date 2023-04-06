@@ -53,6 +53,9 @@
 			}
 		}
 	%>
+	<br>
+	<hr>
+	<input type="button" value=" 회원 정보 수정 ▶▶ " onclick="script:window.location.href='modifyInput.jsp'">
 	
 </body>
 </html>
