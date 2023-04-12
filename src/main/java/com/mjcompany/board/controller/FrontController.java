@@ -41,7 +41,8 @@ public class FrontController extends HttpServlet {
 		if(comm.equals("/write_form.do")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("writeForm.jsp");
 			dispatcher.forward(request, response);
-		} else if(comm.equals("/write.do")) {
+		} 
+		else if(comm.equals("/write.do")) {
 			String writer = request.getParameter("writer");
 			String subject = request.getParameter("subject");
 			String content = request.getParameter("content");
@@ -51,11 +52,32 @@ public class FrontController extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("list.do");
 			dispatcher.forward(request, response);
 			
-		} else if(comm.equals("/list.do")) {
+		} 
+		else if(comm.equals("/list.do")) {
+			
 			ArrayList<BoardDto> dtos = dao.list();
 			request.setAttribute("list", dtos);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("list.jsp");
+			dispatcher.forward(request, response);
+		} 
+		else if(comm.equals("/content_view.do")) {
+			
+			String bnum = request.getParameter("bnum");
+			
+			BoardDto dto = dao.content_view(bnum);
+			request.setAttribute("contentDto", dto);
+					
+			RequestDispatcher dispatcher = request.getRequestDispatcher("contentView.jsp");
+			dispatcher.forward(request, response);
+		} 
+		else if(comm.equals("/delete.do")) {
+			
+			String bnum = request.getParameter("bnum");
+			
+			dao.deleteContent(bnum);
+					
+			RequestDispatcher dispatcher = request.getRequestDispatcher("list.do");
 			dispatcher.forward(request, response);
 		}
 		

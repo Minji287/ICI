@@ -58,7 +58,7 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		String sql = "SELECT * FROM board";
+		String sql = "SELECT * FROM board ORDER BY bnum DESC";
 		
 		try {
 			Class.forName(driverName); // 드라이버 로딩
@@ -98,5 +98,85 @@ public class BoardDao {
 			}
 		}
 		return dtos;
+	}
+	
+	public BoardDto content_view(String bnum) {
+		
+		BoardDto dto = new BoardDto();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * FROM board WHERE bnum=?";
+		
+		try {
+			Class.forName(driverName); // 드라이버 로딩
+			conn = DriverManager.getConnection(url, username, password); // 연결 생성
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bnum);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				int cnum = rs.getInt("bnum");
+				String writer = rs.getString("writer");
+				String subject = rs.getString("subject");
+				String content = rs.getString("content");
+				String wdate = rs.getString("wdate");
+				
+				dto = new BoardDto(cnum, writer, subject, content, wdate);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return dto;
+	}
+	
+	public void deleteContent(String bnum) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = "DELETE FROM board WHERE bnum = ?";
+		
+		try {
+			Class.forName(driverName); // 드라이버 로딩
+			conn = DriverManager.getConnection(url, username, password); // 연결 생성
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bnum);
+			
+			pstmt.executeUpdate();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
