@@ -11,7 +11,7 @@ public class MemberDAO {
 	private String username = "root";
 	private String password = "1234";
 	
-	public int insertMember(String id, String pw, String email) {
+	public int insertMember(MemberDTO dto) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
@@ -25,9 +25,9 @@ public class MemberDAO {
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, id);
-			pstmt.setString(2, pw);
-			pstmt.setString(3, email);
+			pstmt.setString(1, dto.getId());
+			pstmt.setString(2, dto.getPass());
+			pstmt.setString(3, dto.getEmail());
 
 			dbFlag = pstmt.executeUpdate();
 			
