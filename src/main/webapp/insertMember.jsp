@@ -15,13 +15,13 @@
 		// DAO = Data Access Object
 		// DTO = Data Transfer Object
 		
-		// String mid = request.getParameter("userID");
+		// String mid = request.getParameter("userID"); -> action tag(setProperty로 대신함)
 		// String mpw = request.getParameter("userPW");
 		// String memail = request.getParameter("userMAIL");
 		
 		// MemberDTO dto = new MemberDTO(); -> action tag(useBean으로 대신함)
 		
-		// dto.setId(mid);
+		// dto.setId(mid); -> action tag(setProperty로 대신함)
 		// dto.setPass(mpw);
 		// dto.setEmail(memail);
 		
