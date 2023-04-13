@@ -1,7 +1,6 @@
 package com.mjcompany.board.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mjcompany.board.command.*;
 import com.mjcompany.board.dao.BoardDao;
-import com.mjcompany.board.dto.BoardDto;
 
 /**
  * Servlet implementation class FrontController
@@ -34,6 +33,10 @@ public class FrontController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8"); // 한글 깨짐 방지
+		
+		Command command = null;
+		
 		String uri = request.getRequestURI();
 		String conPath = request.getContextPath();
 		String comm = uri.substring(conPath.length()); // .do 요청만 빼서 저장
@@ -43,11 +46,9 @@ public class FrontController extends HttpServlet {
 			dispatcher.forward(request, response);
 		} 
 		else if(comm.equals("/write.do")) {
-			String writer = request.getParameter("writer");
-			String subject = request.getParameter("subject");
-			String content = request.getParameter("content");
 			
-			dao.write(writer, subject, content);
+			command = new WriteCommand();
+			command.execute(request, response);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("list.do");
 			dispatcher.forward(request, response);
@@ -55,28 +56,25 @@ public class FrontController extends HttpServlet {
 		} 
 		else if(comm.equals("/list.do")) {
 			
-			ArrayList<BoardDto> dtos = dao.list();
-			request.setAttribute("list", dtos);
+			command = new ListCommand();
+			command.execute(request, response);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("list.jsp");
 			dispatcher.forward(request, response);
 		} 
 		else if(comm.equals("/content_view.do")) {
 			
-			String bnum = request.getParameter("bnum");
+			command = new ContentCommand();
+			command.execute(request, response);
 			
-			BoardDto dto = dao.content_view(bnum);
-			request.setAttribute("contentDto", dto);
-					
 			RequestDispatcher dispatcher = request.getRequestDispatcher("contentView.jsp");
 			dispatcher.forward(request, response);
 		} 
 		else if(comm.equals("/delete.do")) {
 			
-			String bnum = request.getParameter("bnum");
+			command = new DeleteCommand();
+			command.execute(request, response);
 			
-			dao.deleteContent(bnum);
-					
 			RequestDispatcher dispatcher = request.getRequestDispatcher("list.do");
 			dispatcher.forward(request, response);
 		}
