@@ -12,6 +12,8 @@ public class MainClass {
 		Student stu1 = ctx.getBean("student1", Student.class);
 		
 		System.out.println(stu1.getName());
+		
+		
 	}
 
 }
