@@ -1,10 +1,10 @@
-import java.awt.EventQueue;
-
-import javax.swing.JDialog;
-import javax.swing.JButton;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,29 +16,27 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
 import javax.swing.JComboBox;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import java.awt.Font;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextField;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import javax.swing.SwingConstants;
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 
 public class WinBible extends JDialog {
 
-	private String abbr[] = {"창","출","레","민","신","수","삿","룻","삼상","삼하","왕상","왕하","대상","대하","스","느","에","욥","시","잠","전","아","사","렘","애","겔","단","호","욜","암","옵","욘","미","나","합","습","학","슥","말","마","막","눅","요","행","롬","고전","고후","갈","엡","빌","골","살전","살후","딤전","딤후","딛","몬","히","약","벧전","벧후","요일","요이","요삼","유","계"};
+	private String Abbr[] = {"창","출","레","민","신","수","삿","룻","삼상","삼하","왕상","왕하","대상","대하","스","느","에","욥","시","잠","전","아","사","렘","애","겔","단","호","욜","암","옵","욘","미","나","합","습","학","슥","말","마","막","눅","요","행","롬","고전","고후","갈","엡","빌","골","살전","살후","딤전","딤후","딛","몬","히","약","벧전","벧후","요일","요이","요삼","유","계"};
 	private String full[] = {"창세기","출애굽기","레위기","민수기","신명기","여호수아","사사기","룻기","사무엘상","사무엘하","열왕기상","열왕기하","역대상","역대하","에스라","느헤미야","에스더","욥기","시편","잠언","전도서","아가","이사야","예레미야","예레미야애가","에스겔","다니엘","호세아","요엘","아모스","오바댜","요나","미가","나훔","하박국","스바냐","학개","스가랴","말라기","마태복음","마가복음","누가복음","요한복음","사도행전","로마서","고린도전서","고린도후서","갈라디아서","에베소서","빌립보서","골로새서","데살로니가전서","데살로니가후서","디모데전서","디모데후서","디도서","빌레몬서","히브리서","야고보서","베드로전서","베드로후서","요한일서","요한이서","요한삼서","유다서","요한계시록"};
 	private JComboBox cbBook;
 	private JComboBox cbChapter;
 	private JComboBox cbVerse;
-	private JTextArea taContents;
 	private JTextField tfSearchWord;
-	private JTextField tfAddr;
+	private JTextField tfAbbr;
+	private JTextPane taContents;
 
 	/**
 	 * Launch the application.
@@ -121,8 +119,8 @@ public class WinBible extends JDialog {
 							sBook = temp.substring(0,idx);   //두글자만 출력(왕상, 삼하,...)
 						}
 						int cnt=0;
-						for(int i=0;i<abbr.length;i++)
-							if(abbr[i].equals(sBook)) {
+						for(int i=0;i<Abbr.length;i++)
+							if(Abbr[i].equals(sBook)) {
 								cnt = i;
 								break;
 							}
@@ -235,11 +233,20 @@ public class WinBible extends JDialog {
 					// sql = sql + " and verse=" + sVerse;
 							
 					ResultSet rs = stmt.executeQuery(sql);
-					String temp = "";
+					String temp = "<span style='font: bold 2em Nanum Godic; color:green;'>"; 
+					temp = temp + "[" + sBook + " " + sChapter + ":" + sVerse + "]</span><br><br>";
 					while(rs.next()) {
-						temp = temp + rs.getString("verse") + "   " + rs.getString("contents") + "\n";
+						if(sVerse.equals(rs.getString("verse"))) {
+							temp = temp + "<span style='font: 1.5em bold Nanum Godic; color:red;'>";
+						}
+						else {
+							temp = temp + "<span style='font: 1.5em Nanum Godic; color:black;'>";
+						}
+						temp = temp + rs.getString("verse") + "   " + rs.getString("contents");
+						temp = temp + "</span><br>";
 					}
-					taContents.setText(temp);
+					taContents.setText("<html><body>" + temp + "</body></html>");
+					taContents.setCaretPosition(0);
 				} catch (ClassNotFoundException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -271,11 +278,32 @@ public class WinBible extends JDialog {
 					String temp = "";
 					int count = 0;
 					while(rs.next()) {
-						temp = temp + "[" + rs.getString("book") + " " + rs.getString("chapter") + "장 " +
-									rs.getString("verse") + "절]" + "   " + rs.getString("contents") + "\n";
-						count++;
+						String content = rs.getString("contents");
+						int index = content.indexOf(word);
+						String arrContents[] = content.split(word);
+						
+						temp = temp + "<span style='font: 1.5em bold Nanum Godic; color:red;'>";
+						temp = temp + "[" + rs.getString("book") + " ";
+						if(rs.getString("book").equals("시편")) {
+							temp = temp + rs.getString("chapter") + "편 " + rs.getString("verse") + "절]</span><br>" ;
+						} else {
+							temp = temp + rs.getString("chapter") + "장 " + rs.getString("verse") + "절]</span><br>";
+						}
+						
+						for(int i = 0; i < arrContents.length; i++) {
+							temp = temp + "<span style='font: 1.5em Nanum Godic color:black;'>";
+							temp = temp + arrContents[i] + "</span>";
+							
+							if(i < arrContents.length -1) {
+								temp = temp + "<span style='font: bold 1.5em Nanum Godic; color:blue;'>";
+								temp = temp + word + "</span>";
+								count++;
+							}
+						}
+						temp = temp + "<br>";
 					}
-					taContents.setText(temp);
+					taContents.setText("<html><body>" + temp + "</body></html>");
+					taContents.setCaretPosition(0);
 					setTitle("'" + word + "' " + count + "회 출현");
 				} catch (ClassNotFoundException | SQLException e1) {
 					// TODO Auto-generated catch block
@@ -285,22 +313,23 @@ public class WinBible extends JDialog {
 		});
 		panel.add(btnSearch);
 		
-		tfAddr = new JTextField();
-		tfAddr.addKeyListener(new KeyAdapter() {
+		tfAbbr = new JTextField();
+		tfAbbr.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					String text = tfAddr.getText();
-					int idxSpace=text.indexOf(' ');
-					int idxColon=text.indexOf(':');
-					String sBook = text.substring(0, idxSpace); 
-					String sChapter = text.substring(idxSpace+1, idxColon).trim();
-					String sVerse = text.substring(idxColon+1).trim();
+					String text = tfAbbr.getText();
+					String arrText[] = text.split(" |:|-");
+					String sBook = arrText[0]; 
+					String sChapter = arrText[1];
+					String sVerse = arrText[2];
+					String sVerseTo = arrText[3];
 					
-					sBook = abbr2full(sBook);
+					sBook = Abbr2full(sBook);
 					
 					try {
-						showResult(sBook, sChapter, sVerse);
+//						showResult(sBook, sChapter, sVerse);
+						showResult(sBook, sChapter, sVerse, sVerseTo);
 					} catch (ClassNotFoundException | SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -310,17 +339,17 @@ public class WinBible extends JDialog {
 				}
 			}
 		});
-		panel.add(tfAddr);
-		tfAddr.setColumns(10);
+		panel.add(tfAbbr);
+		tfAbbr.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
-		taContents = new JTextArea();
-		taContents.setFont(new Font("나눔고딕", Font.BOLD, 20));
-		taContents.setLineWrap(true);
+		taContents = new JTextPane();
+		taContents.setContentType("text/html");
 		scrollPane.setViewportView(taContents);
+		taContents.setFont(new Font("맑은 고딕", Font.BOLD, 23));
 		
 		// cbBook에 66권의 책이름을 추가하시오.(full 배열)
 		//for(int i=0;i<full.length;i++)
@@ -333,6 +362,28 @@ public class WinBible extends JDialog {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+
+	protected void showResult(String sBook, String sChapter, String sVerse, String sVerseTo) throws ClassNotFoundException, SQLException {
+		taContents.setText("");
+		
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
+		Statement stmt = con.createStatement();
+		
+		String sql = "select * from bibleTBL where book='" + sBook
+				+ "' and chapter=" + sChapter + " and verse >=" + sVerse + " and verse <=" + sVerseTo;
+				
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		String temp = "";
+		while(rs.next()) {
+			temp = temp + "<span style='font: 1.5em bold Nanum Godic; color:black;'>";
+			temp = temp + "[" + rs.getString("book") + " " + rs.getString("chapter") + "장 " +
+						rs.getString("verse") + "절]" + "   " + rs.getString("contents") + "</span><br>";
+		}
+		taContents.setText(temp);
+		
 	}
 
 	protected void showResult(String sBook, String sChapter, String sVerse) throws ClassNotFoundException, SQLException {
@@ -350,14 +401,14 @@ public class WinBible extends JDialog {
 		String temp = "";
 		while(rs.next()) {
 			temp = temp + "[" + rs.getString("book") + " " + rs.getString("chapter") + "장 " +
-						rs.getString("verse") + "절]" + "   " + rs.getString("contents") + "\n";
+						rs.getString("verse") + "절]" + "   " + rs.getString("contents") + "<br>";
 		}
 		taContents.setText(temp);
 	}
 
-	protected String abbr2full(String sBook) {
-		for(int i = 0; i < abbr.length; i++) {
-			if(sBook.equals(abbr[i])) {
+	protected String Abbr2full(String sBook) {
+		for(int i = 0; i < Abbr.length; i++) {
+			if(sBook.equals(Abbr[i])) {
 				sBook = full[i];
 				break;
 			}
