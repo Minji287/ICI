@@ -78,4 +78,6 @@ public class MemberController {
 		return "studentTest";
 	}
 	
+	
+	
 }
