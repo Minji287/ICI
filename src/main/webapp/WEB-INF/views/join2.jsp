@@ -4,13 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원 로그인</title>
+<title>회원가입</title>
 </head>
 <body>
-	<form action="loginOk" method="post">
+	<form action="studentTest">
 		아이디: <input type="text" name="id"><br>
 		비밀번호: <input type="password" name="pw"><br>
-		<input type="submit" value="로그인">
+		이름: <input type="text" name="name"><br>
+		이메일: <input type="text" name="email"><br>
+		<input type="submit" value="회원가입"><br>
 	</form>
 </body>
 </html>
