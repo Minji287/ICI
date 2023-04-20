@@ -158,4 +158,36 @@ public class BDao { // (Data Access Object)
 		}
 		return dto;
 	}
+	
+	public void modify(String bname, String btitle, String bcontent, String bid) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = dataSource.getConnection();
+			String sql = "UPDATE mvc_board SET bname=?, btitle=?, bcontent=? WHERE bid=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bname);
+			pstmt.setString(2, btitle);
+			pstmt.setString(3, bcontent);
+			pstmt.setString(4, bid);
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

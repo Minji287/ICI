@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mjcompany.board.command.BContentCommand;
 import com.mjcompany.board.command.BListCommand;
+import com.mjcompany.board.command.BModifyCommand;
 import com.mjcompany.board.command.BWriteCommand;
 
 @Controller
@@ -47,6 +48,28 @@ public class BoardController {
 		command.execute(model);
 		
 		return "contentView";
+	}
+	
+	@RequestMapping(value = "/modify_form")
+	public String modify_form(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("request", request);
+		
+		BContentCommand command = new BContentCommand();
+		command.execute(model);
+		
+		return "modifyForm";
+	}
+	
+	@RequestMapping(value = "/modify")
+	public String modify(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("request", request);
+		
+		BModifyCommand command = new BModifyCommand();
+		command.execute(model);
+		
+		return "redirect:list";
 	}
 	
 }
