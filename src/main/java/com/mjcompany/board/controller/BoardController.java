@@ -10,6 +10,7 @@ import com.mjcompany.board.command.BContentCommand;
 import com.mjcompany.board.command.BDeleteCommand;
 import com.mjcompany.board.command.BListCommand;
 import com.mjcompany.board.command.BModifyCommand;
+import com.mjcompany.board.command.BReplyCommand;
 import com.mjcompany.board.command.BWriteCommand;
 
 @Controller
@@ -89,4 +90,25 @@ public class BoardController {
 		return "redirect:list";
 	}
 	
+	@RequestMapping(value = "/reply_form")
+	public String reply_form(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("request", request);
+		
+		BContentCommand command = new BContentCommand();
+		command.execute(model);
+		
+		return "replyForm";
+	}
+	
+	@RequestMapping(value = "/reply")
+	public String reply(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("request", request);
+		
+		BReplyCommand command = new BReplyCommand();
+		command.execute(model);
+		
+		return "redirect:list";
+	}
 }
