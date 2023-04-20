@@ -266,8 +266,8 @@ public class BDao { // (Data Access Object)
 			pstmt.setString(2, btitle);
 			pstmt.setString(3, bcontent);
 			pstmt.setString(4, bgroup);
-			pstmt.setInt(5, Integer.parseInt(bstep+1));
-			pstmt.setInt(6, Integer.parseInt(bindent+1));
+			pstmt.setInt(5, Integer.parseInt(bstep)+1);
+			pstmt.setInt(6, Integer.parseInt(bindent)+1);
 			
 			pstmt.executeUpdate();
 			
