@@ -22,11 +22,11 @@
 		</tr>
 		<tr>
 			<td>제 목</td>
-			<td><input type="text" name="bname" value="${content.btitle }" size="60"></td>
+			<td><input type="text" name="btitle" value="${content.btitle }" size="60"></td>
 		</tr>
 		<tr>
 			<td>내 용</td>
-			<td><textarea rows="10" cols="45" name="bcontent" value="${content.bcontent }"></textarea></td>
+			<td><textarea rows="10" cols="45" name="bcontent">${content.bcontent }></textarea></td>
 		</tr>
 		<tr>
 			<td>등록일</td>

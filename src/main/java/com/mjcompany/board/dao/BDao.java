@@ -190,4 +190,33 @@ public class BDao { // (Data Access Object)
 			}
 		}
 	}
+	
+	public void delete(String bid) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = dataSource.getConnection();
+			String sql = "DELETE FROM mvc_board WHERE bid=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bid);
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
