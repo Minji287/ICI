@@ -15,12 +15,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
 public class WinMemberJoin extends JDialog {
-	private JTextField tfID;
+	private JTextField tfId;
 	private JTextField tfName;
 	private JTextField tfEmail;
 	private JTextField tfMobile;
 	private JPasswordField tfPw;
 	private JButton btnJoin;
+	private JTextField tfBirth;
 
 	/**
 	 * Launch the application.
@@ -43,52 +44,52 @@ public class WinMemberJoin extends JDialog {
 	 * Create the dialog.
 	 */
 	public WinMemberJoin() {
-		setTitle("회원가입 창");
-		setBounds(100, 100, 450, 311);
+		setTitle("회원 가입창");
+		setBounds(100, 100, 422, 314);
 		getContentPane().setLayout(null);
 		
-		JLabel lblID = new JLabel("Id:");
-		lblID.setBounds(53, 46, 57, 15);
-		getContentPane().add(lblID);
+		JLabel lblId = new JLabel("Id:");
+		lblId.setBounds(25, 22, 57, 15);
+		getContentPane().add(lblId);
 		
-		tfID = new JTextField();
-		tfID.setBounds(140, 43, 116, 21);
-		getContentPane().add(tfID);
-		tfID.setColumns(10);
+		tfId = new JTextField();
+		tfId.setBounds(112, 19, 116, 21);
+		getContentPane().add(tfId);
+		tfId.setColumns(10);
 		
 		JLabel lblPw = new JLabel("Pw:");
-		lblPw.setBounds(53, 85, 57, 15);
+		lblPw.setBounds(25, 58, 57, 15);
 		getContentPane().add(lblPw);
-		
-		JLabel lblName = new JLabel("Name:");
-		lblName.setBounds(53, 131, 57, 15);
-		getContentPane().add(lblName);
 		
 		tfName = new JTextField();
 		tfName.setEnabled(false);
 		tfName.setColumns(10);
-		tfName.setBounds(140, 128, 116, 21);
+		tfName.setBounds(112, 96, 116, 21);
 		getContentPane().add(tfName);
 		
-		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(53, 173, 57, 15);
-		getContentPane().add(lblEmail);
+		JLabel lblName = new JLabel("Name:");
+		lblName.setBounds(25, 99, 57, 15);
+		getContentPane().add(lblName);
 		
 		tfEmail = new JTextField();
 		tfEmail.setEnabled(false);
 		tfEmail.setColumns(10);
-		tfEmail.setBounds(140, 170, 190, 21);
+		tfEmail.setBounds(112, 138, 214, 21);
 		getContentPane().add(tfEmail);
 		
-		JLabel lblMobile = new JLabel("Mobile:");
-		lblMobile.setBounds(53, 216, 57, 15);
-		getContentPane().add(lblMobile);
+		JLabel lblEmail = new JLabel("Email:");
+		lblEmail.setBounds(25, 141, 57, 15);
+		getContentPane().add(lblEmail);
 		
 		tfMobile = new JTextField();
 		tfMobile.setEnabled(false);
 		tfMobile.setColumns(10);
-		tfMobile.setBounds(140, 213, 116, 21);
+		tfMobile.setBounds(112, 177, 152, 21);
 		getContentPane().add(tfMobile);
+		
+		JLabel lblMobile = new JLabel("Mobile:");
+		lblMobile.setBounds(25, 180, 57, 15);
+		getContentPane().add(lblMobile);
 		
 		btnJoin = new JButton("가입");
 		btnJoin.setEnabled(false);
@@ -96,38 +97,34 @@ public class WinMemberJoin extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Class.forName("com.mysql.cj.jdbc.Driver");
-					Connection con = DriverManager.getConnection("jdbc:mysql://localhost/sqldb", "root", "1234");
+					Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");
 					System.out.println("DB 연결 완료");
 					Statement stmt = con.createStatement();
 					
-					String temp = tfMobile.getText(); // 01011112222 -> 010-1111-2222
-					if(temp.length() == 11) {
-						temp = temp.substring(0, 3) + "-" + temp.substring(3, 7) + "-" + temp.substring(7);
-					} else {
-						temp = "010-0000-0000";
-					}
+					String temp = tfMobile.getText(); // 01011112222 => 010-1111-2222
+					if(temp.length() == 11)
+						temp = temp.substring(0, 3) + "-" + temp.substring(3, 7) + "-" + temp.substring(7) ;
+					else
+						temp = "000-0000-0000";
 					
-					String sql = "INSERT INTO membertbl VALUES('" + tfID.getText() + "','";
+					String sql = "INSERT INTO membertbl VALUES('" + tfId.getText() + "','";
 					sql = sql + new String(tfPw.getPassword()) + "','" + tfName.getText() + "','";
 					sql = sql + tfEmail.getText() + "','" + temp + "')";
 					
-					if(stmt.executeUpdate(sql) <= 0) {
+					if(stmt.executeUpdate(sql) <= 0)
 						System.out.println("삽입 오류 발생");
-					}
-					
 					
 				} catch (ClassNotFoundException | SQLException e1) {
-					e1.printStackTrace();
-					System.out.println("DB 문제");
+					System.out.println("DB 문제1");
 				}
 			}
 		});
-		btnJoin.setBounds(268, 205, 106, 37);
+		btnJoin.setBounds(276, 169, 97, 30);
 		getContentPane().add(btnJoin);
 		
 		tfPw = new JPasswordField();
 		tfPw.setEnabled(false);
-		tfPw.setBounds(140, 82, 116, 21);
+		tfPw.setBounds(112, 55, 116, 21);
 		getContentPane().add(tfPw);
 		
 		JButton btnDup = new JButton("중복확인");
@@ -135,43 +132,49 @@ public class WinMemberJoin extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Class.forName("com.mysql.cj.jdbc.Driver");
-					Connection con = DriverManager.getConnection("jdbc:mysql://localhost/sqldb", "root", "1234");
+					Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");
 					System.out.println("DB 연결 완료");
 					Statement stmt = con.createStatement();
-					
-					String sql = "SELECT * from membertbl WHERE id='" + tfID.getText() + "'";
-					
+					String sql = "select * from memberTBL where id='" + tfId.getText() + "'";
 					ResultSet rs = stmt.executeQuery(sql);
-					
-					if(rs.next()) {
-						disableEdit();
-						JOptionPane.showMessageDialog(null, "이미 존재하는 아이디 입니다.");
-						tfID.setSelectionStart(0); // 블록 시작
-						tfID.setSelectionEnd(tfID.getText().length()); // 블록 끝
-						tfID.requestFocus(); // 블록 잡기
-					} else {
-						JOptionPane.showMessageDialog(null, "사용 가능한 아이디 입니다.");
+					if(!rs.next()) {
 						enableEdit();
-					}
+					}else {
+						tfId.setSelectionStart(0);  // 블록 시작
+						tfId.setSelectionEnd(tfId.getText().length()); // 블록 끝
+						tfId.requestFocus();
+					}					
 					
 				} catch (ClassNotFoundException | SQLException e1) {
-					e1.printStackTrace();
-					System.out.println("DB 문제");
+					System.out.println("DB 문제1");
 				}
 			}
 		});
-		btnDup.setBounds(268, 42, 97, 23);
+		btnDup.setBounds(245, 18, 97, 23);
 		getContentPane().add(btnDup);
-
-	}
-
-	protected void disableEdit() {
-		btnJoin.setEnabled(false);
-		tfPw.setEnabled(false);
-		tfName.setEnabled(false);
-		tfEmail.setEnabled(false);
-		tfMobile.setEnabled(false);
 		
+		JLabel lblBirth = new JLabel("생일:");
+		lblBirth.setBounds(25, 231, 57, 15);
+		getContentPane().add(lblBirth);
+		
+		tfBirth = new JTextField();
+		tfBirth.setColumns(10);
+		tfBirth.setBounds(112, 228, 152, 21);
+		getContentPane().add(tfBirth);
+		
+		JButton btnCalendar = new JButton("달력...");
+		btnCalendar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinCalendar winCalendar = new WinCalendar();
+				winCalendar.setModal(true);
+				winCalendar.setVisible(true);
+				
+				tfBirth.setText(winCalendar.getDate());
+			}
+		});
+		btnCalendar.setBounds(276, 227, 97, 23);
+		getContentPane().add(btnCalendar);
+
 	}
 
 	protected void enableEdit() {
