@@ -8,7 +8,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
@@ -217,7 +223,23 @@ public class WinAddMember extends JDialog {
 		String sAddress = tfAddress.getText();
 		String sPath = filePath;
 		
-		String sql = sName + "," + sMobile + "," + sEmail + "," + sBirth + "," + sGradYear + "," + sAddress + "," + sPath;
+		String sql = "INSERT INTO addressTBL VALUES('" + sName + "','" + sMobile + "','" + sEmail
+				+ "','" + sBirth + "'," + sGradYear + ",'" + sAddress + "','" + sPath + "'";
 		
+		//=================================
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
+			Statement stmt = con.createStatement();
+			
+			stmt.execute(sql);
+			
+			
+			
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//=================================
 	}
 }
