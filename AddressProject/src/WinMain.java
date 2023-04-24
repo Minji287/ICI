@@ -1,13 +1,12 @@
 import java.awt.EventQueue;
-
-import javax.swing.JDialog;
 import java.awt.GridLayout;
 import java.awt.Image;
-
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 
 public class WinMain extends JDialog {
 
@@ -52,14 +51,35 @@ public class WinMain extends JDialog {
 		getContentPane().add(btnAdd);
 		
 		JButton btnDrop = new JButton("");
+		btnDrop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRemoveMember winRemoveMember = new WinRemoveMember();
+				winRemoveMember.setModal(true);
+				winRemoveMember.setVisible(true);
+			}
+		});
 		btnDrop.setIcon(new ImageIcon(WinMain.class.getResource("/images/user.png")));
 		getContentPane().add(btnDrop);
 		
 		JButton btnAlter = new JButton("");
+		btnAlter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinMultiSearch winMultiSearch = new WinMultiSearch();
+				winMultiSearch.setModal(true);
+				winMultiSearch.setVisible(true);
+			}
+		});
 		btnAlter.setIcon(new ImageIcon(WinMain.class.getResource("/images/edit.png")));
 		getContentPane().add(btnAlter);
 		
 		JButton btnSearch = new JButton("");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinSearchResult2 wsr2 = new WinSearchResult2();
+				wsr2.setModal(true);
+				wsr2.setVisible(true);
+			}
+		});
 		btnSearch.setIcon(new ImageIcon(WinMain.class.getResource("/images/search.png")));
 		getContentPane().add(btnSearch);
 

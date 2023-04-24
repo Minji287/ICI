@@ -12,20 +12,33 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import com.mysql.cj.xdevapi.Table;
+
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JTable;
+import javax.swing.JLabel;
 
-public class WinSearchDoro extends JDialog {
-	private JTextField tfDoro;
-	private JList list;
+public class WinSearchMember extends JDialog {
+	private JTextField tfName;
 	private String sAddress;
-
+	private JTable table;
+	
+	private String sID;
+	
+	public String getID() {
+		return sID;
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -33,7 +46,7 @@ public class WinSearchDoro extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WinSearchDoro dialog = new WinSearchDoro();
+					WinSearchMember dialog = new WinSearchMember();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -50,30 +63,33 @@ public class WinSearchDoro extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public WinSearchDoro() {
-		setTitle("도로명 선택");
+	public WinSearchMember() {
+		setTitle("회원 검색 후 선택");
 		setBounds(100, 100, 449, 327);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.NORTH);
 		
-		tfDoro = new JTextField();
-		tfDoro.addKeyListener(new KeyAdapter() {
+		tfName = new JTextField();
+		tfName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					searchAddress();
+					showAddress();
 				}
 			}
 		});
-		panel.add(tfDoro);
-		tfDoro.setColumns(10);
 		
-		JButton btnSearch = new JButton("탐색");
+		JLabel lblName = new JLabel("회원명:");
+		panel.add(lblName);
+		panel.add(tfName);
+		tfName.setColumns(10);
+		
+		JButton btnSearch = new JButton("검색");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				searchAddress();
+				showAddress();
 			}
 		});
 		panel.add(btnSearch);
@@ -85,43 +101,46 @@ public class WinSearchDoro extends JDialog {
 		JScrollPane scrollPane = new JScrollPane();
 		panelResult.add(scrollPane, BorderLayout.CENTER);
 		
-		list = new JList();
-		list.addMouseListener(new MouseAdapter() {
+		String columns[] = {"ID", "이름", "전화번호", "졸업년도", "주소"};
+		DefaultTableModel dtm = new DefaultTableModel(columns, 0);
+		
+		table = new JTable(dtm);
+		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2) {
-					sAddress = list.getSelectedValue().toString();
-					dispose();
-				}
+				int row = table.getSelectedRow();
+				sID = table.getValueAt(row, 0).toString();
+				dispose();
 			}
 		});
-		list.setFont(new Font("굴림", Font.PLAIN, 16));
-		scrollPane.setViewportView(list);
+		scrollPane.setViewportView(table);
 
 	}
 
-	protected void searchAddress() {
-		String doro = tfDoro.getText();
+	protected void showAddress() {
+		String name = tfName.getText();
 		//=================================
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
 			Statement stmt = con.createStatement();
 			
-			String sql = "SELECT * FROM addressTBL WHERE doro='" + doro + "'";
+			String sql = "SELECT * FROM addrTBL WHERE name like '" + name + "%'";
 			ResultSet rs = stmt.executeQuery(sql);
 			
-			Vector<String> v = new Vector<>();
+			DefaultTableModel dtm = (DefaultTableModel)table.getModel();
+			dtm.setRowCount(0);
 			
 			while(rs.next()) {
-				String sSi = rs.getString("si");
-				String sGu = rs.getString("gu");
-				String sDong = rs.getString("dong");
+				Vector<String> cols = new Vector<>();
+				cols.add(rs.getString("idx"));
+				cols.add(rs.getString("name"));
+				cols.add(rs.getString("mobile"));
+				cols.add(rs.getString("gradYear"));
+				cols.add(rs.getString("address"));
 				
-				v.add(sSi + " " + sGu + " " + sDong);
+				dtm.addRow(cols);
 			}
-			
-			list.setListData(v);
 			
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
