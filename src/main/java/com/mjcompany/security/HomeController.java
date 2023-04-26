@@ -36,13 +36,18 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "/login")
+	@RequestMapping(value = "/login.html")
 	public String login() {
 		return "login";
 	}
 	
-	@RequestMapping(value = "/admin")
+	@RequestMapping(value = "/admin.html")
 	public String admin() {
 		return "admin";
+	}
+	
+	@RequestMapping(value = "/loginForm.html")
+	public String loginForm() {
+		return "loginForm";
 	}
 }
