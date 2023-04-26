@@ -21,7 +21,7 @@ public class BoardController {
 	
 	private JdbcTemplate template;
 	
-	@Autowired // DI(Dependency Injection)
+	@Autowired // DI(Dependency Injection) 자동 의존주입 설정
 	public void setTemplate(JdbcTemplate template) {
 		this.template = template;
 		Constant.template = this.template;
