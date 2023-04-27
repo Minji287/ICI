@@ -1,5 +1,7 @@
 package com.mjcompany.mj_mybatisBoard.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
@@ -27,9 +29,27 @@ public class BoardController {
 		
 		IDao dao = sqlSession.getMapper(IDao.class);
 		
-		dao.joinMemberDao(request.getParameter("mid"), request.getParameter("mpw"), request.getParameter("mname"), request.getParameter("memail"));
+		int checkId = dao.checkIdDao(request.getParameter("mid"));
 		
-		model.addAttribute("memberName", request.getParameter("mname"));
+		if(checkId == 0) {
+			dao.joinMemberDao(request.getParameter("mid"), request.getParameter("mpw"), request.getParameter("mname"), request.getParameter("memail"));
+			model.addAttribute("memberName", request.getParameter("mname"));
+			model.addAttribute("checkIdFlag", "joinOk");
+		} else {
+			model.addAttribute("checkIdFlag", "1");
+		}
+		
+		return "joinOk";
+	}
+	
+	@RequestMapping(value = "/checkId")
+	public String checkId(HttpServletRequest request, Model model) {
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		int checkIdFlag = dao.checkIdDao(request.getParameter("checkId")); // 가입 되어있으면 1, 아니면 0
+		
+		model.addAttribute("checkIdFlag", checkIdFlag);
 		
 		return "joinOk";
 	}
