@@ -3,6 +3,7 @@ package com.mjcompany.mj_mybatisBoard.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,35 @@ public class BoardController {
 		model.addAttribute("checkIdFlag", checkIdFlag);
 		
 		return "joinOk";
+	}
+	
+	@RequestMapping(value = "/login")
+	public String login() {
+		return "login";
+	}
+	
+	@RequestMapping(value = "/loginOk", method = RequestMethod.POST)
+	public String loginOk(HttpServletRequest request, Model model, HttpSession session) {
+		
+		String mid = request.getParameter("mid");
+		String mpw = request.getParameter("mpw");
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		int checkIdFlag = dao.checkIdDao(mid);
+		
+		model.addAttribute("checkIdFlag", checkIdFlag);
+		
+		int checkIdPwFlag = dao.checkIdPwDao(mid, mpw);
+		
+		model.addAttribute("checkIdPwFlag", checkIdPwFlag);
+		
+		if(checkIdPwFlag == 1) { // 로그인 성공
+//			HttpSession session = request.getSession(); // 컨트롤러에서 세션 객체 가져오기
+			session.setAttribute("sessionId", mid);
+			model.addAttribute("memberId", mid);
+		}
+		
+		return "loginOk";
 	}
 }
