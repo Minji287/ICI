@@ -30,6 +30,11 @@ public class HomeController {
 		
 		model.addAttribute("list", dtos);
 		
+		int total = dao.totalCount();
+//		model.addAttribute("total", dtos.size());
+		model.addAttribute("total", total);
+		
+		
 		return "list";
 	}
 	
