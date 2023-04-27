@@ -31,7 +31,7 @@
 
 	${memberId }님 로그인 하셨습니다.<br> <!-- el 표기법으로 모델에 있는 값 빼는 방법 -->
 	게시판에 열심히 글을 써주세요!!<br><br>
-	<a href="">게시판 바로가기</a><br><br>
+	<a href="write_form">게시판 바로가기</a><br><br>
 	<a href="logout">로그아웃</a>
 	
 </body>

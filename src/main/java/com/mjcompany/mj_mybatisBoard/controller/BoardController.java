@@ -92,4 +92,9 @@ public class BoardController {
 		
 		return "login";
 	}
+	
+	@RequestMapping(value = "write_form")
+	public String write_form() {
+		return "writeForm";
+	}
 }
