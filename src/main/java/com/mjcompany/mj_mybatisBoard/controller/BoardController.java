@@ -1,5 +1,7 @@
 package com.mjcompany.mj_mybatisBoard.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mjcompany.mj_mybatisBoard.dao.IDao;
 import com.mjcompany.mj_mybatisBoard.dto.FbMemberDto;
+import com.mjcompany.mj_mybatisBoard.dto.FreeBoardDto;
 
 @Controller
 public class BoardController {
@@ -123,5 +126,18 @@ public class BoardController {
 		dao.writeDao(fid, fname, ftitle, fcontent);
 		
 		return "redirect:list";
+	}
+	
+	@RequestMapping(value = "/list")
+	public String list(Model model) {
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		ArrayList<FreeBoardDto> dtos = dao.listDao();
+		
+		model.addAttribute("list", dtos);
+		model.addAttribute("total", dao.totalBoardDao());
+		
+		return "list";
 	}
 }

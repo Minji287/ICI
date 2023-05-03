@@ -1,6 +1,9 @@
 package com.mjcompany.mj_mybatisBoard.dao;
 
+import java.util.ArrayList;
+
 import com.mjcompany.mj_mybatisBoard.dto.FbMemberDto;
+import com.mjcompany.mj_mybatisBoard.dto.FreeBoardDto;
 
 public interface IDao {
 	
@@ -12,5 +15,6 @@ public interface IDao {
 	// 게시판 관련
 	public FbMemberDto getMemberInfo(String mid); // 아이디로 검색하여 회원정보 가져오기
 	public void writeDao(String mid, String mname, String ftitle, String fcontent); // 게시판 글쓰기
-	
+	public ArrayList<FreeBoardDto> listDao(); // 게시판 글 목록 불러오기
+	public int totalBoardDao(); // 총 게시글 수 세기
 }
