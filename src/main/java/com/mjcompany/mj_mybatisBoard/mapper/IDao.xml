@@ -32,4 +32,10 @@
 	<select id="totalBoardDao" resultType="int">
 		SELECT COUNT(*) FROM freeboard
 	</select>
+	<select id="contentViewDao" resultType="com.mjcompany.mj_mybatisBoard.dto.FreeBoardDto">
+		SELECT * FROM freeboard WHERE fnum=#{param1}
+	</select>
+	<delete id="deleteDao">
+		DELETE FROM freeboard WHERE fnum=#{param1} 
+	</delete>
 </mapper>

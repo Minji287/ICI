@@ -17,4 +17,6 @@ public interface IDao {
 	public void writeDao(String mid, String mname, String ftitle, String fcontent); // 게시판 글쓰기
 	public ArrayList<FreeBoardDto> listDao(); // 게시판 글 목록 불러오기
 	public int totalBoardDao(); // 총 게시글 수 세기
+	public FreeBoardDto contentViewDao(String fnum); // 특정 번호의 글 1개 가져오기
+	public void deleteDao(String fnum); // 글 지우기
 }
