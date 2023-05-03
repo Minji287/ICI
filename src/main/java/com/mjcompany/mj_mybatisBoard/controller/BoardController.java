@@ -142,13 +142,25 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/content_view")
-	public String content_view(HttpServletRequest request, Model model) {
+	public String content_view(HttpServletRequest request, Model model, HttpSession session) {
 		
 		String fnum = request.getParameter("fnum");
 		
 		IDao dao = sqlSession.getMapper(IDao.class);
 		
+		dao.uphitDao(fnum); // 조회수 증가함수 (fhit=fhit+1)
+		
 		FreeBoardDto dto = dao.contentViewDao(fnum);
+		
+		String sessionId = (String)session.getAttribute("sessionId");
+		
+		if(sessionId == null) {//로그인하지 않은 경우
+			model.addAttribute("delCheck", "0");
+		} else if(sessionId.equals(dto.getFid())) { //로그인한 아이디와 글쓴아이디가 일치
+			model.addAttribute("delCheck", "1");
+		} else { //로그인한 아이디와 글쓴아이디가 일치하지 않은 경우
+			model.addAttribute("delCheck", "0");
+		}
 		
 		model.addAttribute("content", dto);
 		
@@ -158,11 +170,9 @@ public class BoardController {
 	@RequestMapping(value = "/delete")
 	public String delete(HttpServletRequest request) {
 		
-		String fnum = request.getParameter("fnum");
-		
 		IDao dao = sqlSession.getMapper(IDao.class);
 		
-		dao.deleteDao(fnum);
+		dao.deleteDao(request.getParameter("fnum"));
 		
 		return "redirect:list";
 	}

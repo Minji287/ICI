@@ -38,4 +38,7 @@
 	<delete id="deleteDao">
 		DELETE FROM freeboard WHERE fnum=#{param1} 
 	</delete>
+	<update id="uphitDao">
+		UPDATE freeboard SET fhit = fhit+1 WHERE fnum=#{param1}
+	</update>
 </mapper>
