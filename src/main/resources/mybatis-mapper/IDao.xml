@@ -4,3 +4,31 @@
    PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN"
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
    
+<mapper namespace="com.mjcompany.mybatis_join.dao.IDao">
+	<resultMap type="com.mjcompany.mybatis_join.dto.MemberDto" id="memberDto">
+		<result property="id" column="id"/>
+		<result property="pw" column="pw"/>
+		<result property="name" column="name"/>
+		<result property="email" column="email"/>
+	</resultMap>
+	<resultMap type="com.mjcompany.mybatis_join.dto.BoardDto" id="boardDto">
+		<result property="tnum" column="tnum"/>
+		<result property="writerid" column="writerid"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="createtime" column="createtime"/>
+		
+		<collection property="memberDto" resultMap="memberDto"></collection>
+	</resultMap>
+	
+	<select id="listDao" parameterType="com.mjcompany.mybatis_join.dto.BoardDto" resultMap="boardDto">
+		SELECT
+		 *
+		 FROM
+			tboard
+			JOIN tmember
+			ON tboard.writerid = tmember.id
+		WHERE tboard.writerid=#{param1}	
+	</select>
+	
+</mapper>
