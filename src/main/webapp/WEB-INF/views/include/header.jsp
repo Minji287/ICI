@@ -11,17 +11,17 @@
 	<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<tr class="headerline">
 			<td class="margin01">&nbsp;</td>
-			<td class="headertext">HOME</td>
+			<td class="headertext"><a href="index">HOME</a></td>
 			<td class="margin02">&nbsp;</td>
 			<td class="headertext"><a href="login">LOGIN</a></td>
 			<td class="margin02">&nbsp;</td>
 			<td class="headertext"><a href="join">JOIN</a></td>
 			<td class="margin02">&nbsp;</td>
-			<td class="headertext">PROFILE</td>
+			<td class="headertext"><a href="profile">PROFILE</a></td>
 			<td class="margin02">&nbsp;</td>
 			<td class="headertext">QUESTION</td>
 			<td class="margin02">&nbsp;</td>
-			<td class="headertext">CONTACT</td>
+			<td class="headertext"><a href="contact">CONTACT</a></td>
 			<td class="margin02">&nbsp;</td>
 		</tr>
 		<tr class="marginline">
