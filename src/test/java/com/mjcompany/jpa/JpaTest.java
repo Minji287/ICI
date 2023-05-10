@@ -1,5 +1,7 @@
 package com.mjcompany.jpa;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +55,8 @@ public class JpaTest {
 	public void modifyMember() {
 		
 		Optional<MemberDto> optionalDto = memberRepository.findById(1L);
+		
+		assertTrue(optionalDto.isPresent()); // null 값 여부 체크
 		
 		MemberDto memberDto = optionalDto.get();
 		

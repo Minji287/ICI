@@ -80,7 +80,9 @@ public class HomeController {
 	@RequestMapping(value = "/memberList")
 	public String memberList(Model model) {
 
-		model.addAttribute("memberDtos", memberRepository.findAll());
+//		model.addAttribute("memberDtos", memberRepository.findAll());
+		// 학번의 내림차순 정렬 후 모든 회원 리스트 가져오기
+		model.addAttribute("memberDtos", memberRepository.findAllByOrderByHakbunDesc());
 		
 		return "memberList";
 	}
