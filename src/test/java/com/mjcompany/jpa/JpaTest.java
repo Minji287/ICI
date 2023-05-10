@@ -1,6 +1,7 @@
 package com.mjcompany.jpa;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,16 +19,16 @@ public class JpaTest {
 	@Autowired
 	MemberRepository memberRepository;
 	
-	@Test
-	@DisplayName("이름 검색 테스트")
-	
-	public void searchName() {
-		List<MemberDto> memberDtos = memberRepository.findByName("김유신");
-		
-		for(MemberDto memberDto : memberDtos) {
-			System.out.println(memberDto.toString());
-		}
-	}
+//	@Test
+//	@DisplayName("이름 검색 테스트")
+//	
+//	public void searchName() {
+//		List<MemberDto> memberDtos = memberRepository.findByName("김유신");
+//		
+//		for(MemberDto memberDto : memberDtos) {
+//			System.out.println(memberDto.toString());
+//		}
+//	}
 	
 //	@Test
 //	@DisplayName("회원 탈퇴 테스트")
@@ -37,13 +38,30 @@ public class JpaTest {
 //		
 //	}
 	
+//	@Test
+//	@DisplayName("회원 리스트 테스트")
+//	public void memberList() {
+//		List<MemberDto> memberDtos = memberRepository.findAll(); // 모든 회원 리스트 가져오기
+//		
+//		for(MemberDto memberDto : memberDtos) {
+//			System.out.println(memberDto.toString());
+//		}
+//	}
+	
 	@Test
-	@DisplayName("회원 리스트 테스트")
-	public void memberList() {
-		List<MemberDto> memberDtos = memberRepository.findAll(); // 모든 회원 리스트 가져오기
+	@DisplayName("회원 정보 수정 테스트")
+	public void modifyMember() {
 		
-		for(MemberDto memberDto : memberDtos) {
-			System.out.println(memberDto.toString());
-		}
+		Optional<MemberDto> optionalDto = memberRepository.findById(1L);
+		
+		MemberDto memberDto = optionalDto.get();
+		
+		memberDto.setAge(32); // 나이 수정
+		
+		memberRepository.save(memberDto);
+		
+		optionalDto = memberRepository.findById(1L);
+		
+		System.out.println(optionalDto.get().toString());
 	}
 }
