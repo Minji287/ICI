@@ -13,5 +13,9 @@
 		탈퇴 회원 학번 입력 : <input type="text" name="hakbun">
 		<input type="submit" value="탈퇴">
 	</form>
+	<form action="deleteOk2">
+		탈퇴 회원 이름 입력 : <input type="text" name="name">
+		<input type="submit" value="탈퇴">
+	</form>
 </body>
 </html>

@@ -86,4 +86,14 @@ public class HomeController {
 		
 		return "memberList";
 	}
+	
+	@RequestMapping(value = "/deleteOk2")
+	public String deleteOk2(HttpServletRequest request, Model model) {
+		
+		String name = request.getParameter("name");
+		
+		memberRepository.deleteAllByName(name);
+		
+		return "redirect:memberList";
+	}
 }
