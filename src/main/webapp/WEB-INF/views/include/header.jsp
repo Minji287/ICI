@@ -13,9 +13,9 @@
 			<td class="margin01">&nbsp;</td>
 			<td class="headertext">HOME</td>
 			<td class="margin02">&nbsp;</td>
-			<td class="headertext">LOGIN</td>
+			<td class="headertext"><a href="login">LOGIN</a></td>
 			<td class="margin02">&nbsp;</td>
-			<td class="headertext">JOIN</td>
+			<td class="headertext"><a href="join">JOIN</a></td>
 			<td class="margin02">&nbsp;</td>
 			<td class="headertext">PROFILE</td>
 			<td class="margin02">&nbsp;</td>
