@@ -61,4 +61,27 @@ public class HomeController {
 		
 		return "searchOk";
 	}
+	
+	@RequestMapping(value = "/delete")
+	public String delete() {
+		return "delete";
+	}
+	
+	@RequestMapping(value = "/deleteOk")
+	public String deleteOk(HttpServletRequest request, Model model) {
+		
+		Long hakbun = Long.parseLong(request.getParameter("hakbun"));
+		
+		memberRepository.deleteById(hakbun);
+		
+		return "redirect:memberList";
+	}
+	
+	@RequestMapping(value = "/memberList")
+	public String memberList(Model model) {
+
+		model.addAttribute("memberDtos", memberRepository.findAll());
+		
+		return "memberList";
+	}
 }
