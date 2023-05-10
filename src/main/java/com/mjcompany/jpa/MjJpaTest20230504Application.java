@@ -1,4 +1,4 @@
-package com.mjcompany.jpa_test;
+package com.mjcompany.jpa;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
