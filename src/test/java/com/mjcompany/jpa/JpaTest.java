@@ -50,22 +50,42 @@ public class JpaTest {
 //		}
 //	}
 	
+//	@Test
+//	@DisplayName("회원 정보 수정 테스트")
+//	public void modifyMember() {
+//		
+//		Optional<MemberDto> optionalDto = memberRepository.findById(1L);
+//		
+//		assertTrue(optionalDto.isPresent()); // null 값 여부 체크
+//		
+//		MemberDto memberDto = optionalDto.get();
+//		
+//		memberDto.setAge(32); // 나이 수정
+//		
+//		memberRepository.save(memberDto);
+//		
+//		optionalDto = memberRepository.findById(1L);
+//		
+//		System.out.println(optionalDto.get().toString());
+//	}
+	
 	@Test
-	@DisplayName("회원 정보 수정 테스트")
-	public void modifyMember() {
+	@DisplayName("회원 이름 중 성씨로 찾기")
+	public void searchFirst() {
+		List<MemberDto> memberDtos = memberRepository.findByNameStartingWith("강");
 		
-		Optional<MemberDto> optionalDto = memberRepository.findById(1L);
+		for(MemberDto memberDto : memberDtos) {
+			System.out.println(memberDto.toString());
+		}
+	}
+	
+	@Test
+	@DisplayName("회원 이름 중 특정단어 포함된 이름 찾기")
+	public void searchFirst2() {
+		List<MemberDto> memberDtos = memberRepository.findByNameLike("%가%");
 		
-		assertTrue(optionalDto.isPresent()); // null 값 여부 체크
-		
-		MemberDto memberDto = optionalDto.get();
-		
-		memberDto.setAge(32); // 나이 수정
-		
-		memberRepository.save(memberDto);
-		
-		optionalDto = memberRepository.findById(1L);
-		
-		System.out.println(optionalDto.get().toString());
+		for(MemberDto memberDto : memberDtos) {
+			System.out.println(memberDto.toString());
+		}
 	}
 }
