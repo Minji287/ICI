@@ -29,3 +29,17 @@ td.margin02 {
 tr.marginline {
 	height: 40px
 }
+
+a:link {
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+	color: inherit;
+}
+
+a:hover {
+	color: #ffffff;
+}
+

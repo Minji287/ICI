@@ -28,7 +28,7 @@ input.inputbox01 {
 	width: 250px;
 	font-family: Arial;
 	font-size: 16px;
-	color: #19A7CE;
+	color: #146C94;
 	padding: 3px;
 }
 
@@ -58,4 +58,16 @@ input.content_btn01:hover {
 	padding: 5px;
 	cursor: pointer;	
 }
+
+textarea.textareabox {
+	border: 1px solid;
+	border-color: #a2d2ff;
+	background-color: #FFFFFF;
+	width: 250px;
+	font-family: Arial;
+	font-size: 16px;
+	color: #146C94;
+	padding: 3px;
+}
+
 

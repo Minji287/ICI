@@ -19,7 +19,7 @@
 			<td class="margin02">&nbsp;</td>
 			<td class="headertext"><a href="profile">PROFILE</a></td>
 			<td class="margin02">&nbsp;</td>
-			<td class="headertext">QUESTION</td>
+			<td class="headertext"><a href="question">QUESTION</a></td>
 			<td class="margin02">&nbsp;</td>
 			<td class="headertext"><a href="contact">CONTACT</a></td>
 			<td class="margin02">&nbsp;</td>
