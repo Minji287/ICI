@@ -49,14 +49,16 @@
 															<td class="content01">${dto.bid }</td>
 															<td class="content01">${dto.bname }</td>
 															<td class="content02" width="50%">
-															<c:choose>
-																<c:when test="${fn:length(dto.bcontent) > 30}">
-																	<c:out value="${fn:substring(dto.bcontent, 0, 29) }"></c:out>...
-																</c:when>
-																<c:otherwise>
-																	<c:out value="${dto.bcontent }"></c:out>
-																</c:otherwise> 
-															</c:choose>
+															<a href="contentView?bnum=${dto.bnum }">
+																<c:choose>
+																	<c:when test="${fn:length(dto.bcontent) > 30}">
+																		<c:out value="${fn:substring(dto.bcontent, 0, 29) }"></c:out>...
+																	</c:when>
+																	<c:otherwise>
+																		<c:out value="${dto.bcontent }"></c:out>
+																	</c:otherwise> 
+																</c:choose>
+															</a>
 															</td>
 															<td class="content01">
 															<c:out value="${fn:substring(dto.bdate, 0, 10) }"></c:out>

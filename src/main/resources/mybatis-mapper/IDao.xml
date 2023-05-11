@@ -34,4 +34,12 @@
 		SELECT * FROM web_board ORDER BY bnum DESC 
 	</select>
 	
+	<select id="contentViewDao" resultType="com.mjcompany.home.dto.BoardDto">
+		SELECT * FROM web_board WHERE bnum=${param1}
+	</select>
+	
+	<delete id="deleteDao">
+		DELETE FROM web_board WHERE bnum=${param1}
+	</delete>
+	
 </mapper>

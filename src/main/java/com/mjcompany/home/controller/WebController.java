@@ -181,4 +181,26 @@ public class WebController {
 		
 		return "list";
 	}
+	
+	@RequestMapping(value = "/contentView")
+	public String contentView(HttpServletRequest request, Model model) {
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		BoardDto boardDto = dao.contentViewDao(request.getParameter("bnum"));
+		
+		model.addAttribute("boardDto", boardDto);
+		
+		return "contentView";
+	}
+	
+	@RequestMapping(value = "/delete")
+	public String delete(HttpServletRequest request) {
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		dao.deleteDao(request.getParameter("bnum"));
+		
+		return "redirect:list";
+	}
 }
