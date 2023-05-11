@@ -22,4 +22,8 @@
 		SELECT * FROM web_member WHERE mid=#{param1}
 	</select>
 	
+	<update id="modifyMemberDao">
+		UPDATE web_member SET mpw=#{param2}, mname=#{param3}, memail=#{param4} WHERE mid=#{param1}
+	</update>
+	
 </mapper>
