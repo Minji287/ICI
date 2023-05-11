@@ -31,7 +31,11 @@
 	</insert>
 	
 	<select id="questionListDao" resultType="com.mjcompany.home.dto.BoardDto">
-		SELECT * FROM web_board ORDER BY bnum DESC 
+		SELECT * FROM
+			(SELECT A.*, FLOOR((ROWNUM-1) / #{amount} + 1)PAGE, ROWNUM
+				FROM
+					(SELECT * from web_board ORDER BY bnum DESC)A)
+						WHERE PAGE=#{pageNum}
 	</select>
 	
 	<select id="contentViewDao" resultType="com.mjcompany.home.dto.BoardDto">
