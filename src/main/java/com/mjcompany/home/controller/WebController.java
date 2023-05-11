@@ -1,6 +1,7 @@
 package com.mjcompany.home.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mjcompany.home.dao.IDao;
+import com.mjcompany.home.dto.MemberDto;
 
 @Controller
 public class WebController {
@@ -77,5 +79,26 @@ public class WebController {
 		}
 		
 		return "joinOk";
+	}
+	
+	@RequestMapping(value = "/loginOk")
+	public String loginOk(HttpServletRequest request, Model model, HttpSession session) {
+		
+		String mid = request.getParameter("mid");
+		String mpw = request.getParameter("mpw");
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		// 1이면 로그인 성공, 0이면 실패
+		int checkIdPwFlag = dao.checkIdPwDao(mid, mpw);
+		
+		model.addAttribute("checkIdPwFlag", checkIdPwFlag);
+		
+		if(checkIdPwFlag == 1) { // 로그인 성공 실행
+			session.setAttribute("sessionId", mid);
+			model.addAttribute("memberDto", dao.getMemberInfo(mid));
+		}
+		
+		return "loginOk";
 	}
 }

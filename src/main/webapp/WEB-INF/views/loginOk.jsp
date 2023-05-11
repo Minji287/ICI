@@ -10,12 +10,12 @@
 </head>
 <body>
 	<%
-		int checkId = Integer.parseInt((request.getAttribute("checkId")).toString());
+		int checkIdPwFlag = Integer.parseInt((request.getAttribute("checkIdPwFlag")).toString());
 	
-		if(checkId == 1) {
+		if(checkIdPwFlag == 0) {
 	%>
 		<script type="text/javascript">
-			alert("입력하신 아이디는 이미 가입된 아이디 입니다. 다시 입력해주세요.");
+			alert("입력하신 아이디 또는 비밀번호가 일치하지 않습니다. 다시 입력해 주세요.");
 			history.go(-1);
 		</script>
 	<%
@@ -44,9 +44,8 @@
 								<table border="0" cellspacing="0" cellpadding="10">
 									<tr>
 										<td class="main_text">
-											${memberName }님 회원가입을 축하드립니다!<br>
-											가입하신 아이디는 ${memberId }입니다.<br><br>
-											<input class="content_btn01" type="button" value="로그인 바로가기" onclick="script:window.location.href='login'">
+											${memberDto.mname }님 로그인 하셨습니다. 반갑습니다!<br>
+											${memberDto.mid }님의 가입일은 ${memberDto.mdate }입니다.<br><br>
 										</td>
 									</tr>
 								</table>

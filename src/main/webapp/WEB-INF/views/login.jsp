@@ -30,14 +30,14 @@
 						<td class="contentbox">
 							<center>
 								<table border="0" cellspacing="0" cellpadding="10">
-									<form accept="loginOk" method="post">
+									<form action="loginOk" method="post">
 										<tr>
 											<td class="content_text">아 이 디 : </td>
 											<td><input class="inputbox01" type="text" name="mid"></td>
 										</tr>
 										<tr>
 											<td class="content_text">비밀번호 : </td>
-											<td><input class="inputbox01" type="text" name="mpw"></td>
+											<td><input class="inputbox01" type="password" name="mpw"></td>
 										</tr>
 										<tr>
 											<td colspan="2" align="center">

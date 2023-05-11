@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/resources/css/title.css">
 <link rel="stylesheet" href="/resources/css/content.css">
+<script type="text/javascript" src="/resources/js/join.js"></script>
 <title>로그인</title>
 </head>
 <body>
@@ -30,7 +31,7 @@
 						<td class="contentbox">
 							<center>
 								<table border="0" cellspacing="0" cellpadding="10">
-									<form action="joinOk" method="post">
+									<form action="joinOk" method="post" name="join_frm">
 										<tr>
 											<td class="content_text">아 이 디 : </td>
 											<td><input class="inputbox01" type="text" name="mid"></td>
@@ -53,7 +54,7 @@
 										</tr>
 										<tr>
 											<td colspan="2" align="center">
-												<input class="content_btn01" type="submit" value="가입완료">&nbsp;&nbsp;
+												<input class="content_btn01" type="button" value="가입완료" onclick="joinCheck()">&nbsp;&nbsp;
 												<input class="content_btn01" type="button" value="로그인" onclick="script:window.location.href='login'">
 											</td>
 										</tr>
