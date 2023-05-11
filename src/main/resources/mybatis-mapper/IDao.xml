@@ -6,6 +6,12 @@
    
 <mapper namespace="com.mjcompany.home.dao.IDao">
 
+	<insert id="joinDao">
+		INSERT INTO web_member(mid, mpw, mname, memail) VALUES (#{param1}, #{param2}, #{param3}, #{param4})
+	</insert>
 	
+	<select id="checkIdDao" resultType="int">
+		SELECT COUNT(*) FROM web_member WHERE mid=#{param1} 
+	</select>
 	
 </mapper>
