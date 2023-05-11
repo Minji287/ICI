@@ -1,5 +1,7 @@
 package com.mjcompany.home.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mjcompany.home.dao.IDao;
+import com.mjcompany.home.dto.BoardDto;
 import com.mjcompany.home.dto.MemberDto;
 
 @Controller
@@ -48,7 +51,7 @@ public class WebController {
 		
 		String sessionId = (String)session.getAttribute("sessionId");
 		
-		MemberDto memberDto = new MemberDto("GUEST", " ", "비회원", "guest@guest.com", " ");
+		MemberDto memberDto = new MemberDto("GUEST", "", "비회원", "", "");
 		
 		IDao dao = sqlSession.getMapper(IDao.class);
 		
@@ -150,5 +153,32 @@ public class WebController {
 		model.addAttribute("memberDto", dao.getMemberInfo(mid));
 		
 		return "modifyOk";
+	}
+	
+	@RequestMapping(value = "/questionOk")
+	public String questionOk(HttpServletRequest request) {
+		
+		String bid = request.getParameter("bid");
+		String bname = request.getParameter("bname");
+		String bcontent = request.getParameter("bcontent");
+		String bemail = request.getParameter("bemail");
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		dao.questionWriteDao(bid, bname, bcontent, bemail);
+		
+		return "redirect:list";
+	}
+	
+	@RequestMapping(value = "/list")
+	public String list(Model model) {
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		List<BoardDto> boardDtos = dao.questionListDao();
+		
+		model.addAttribute("boardDtos", boardDtos);
+		
+		return "list";
 	}
 }

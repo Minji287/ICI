@@ -26,4 +26,12 @@
 		UPDATE web_member SET mpw=#{param2}, mname=#{param3}, memail=#{param4} WHERE mid=#{param1}
 	</update>
 	
+	<insert id="questionWriteDao">
+		INSERT INTO web_board(bnum, bid, bname, bcontent, bemail) VALUES (webboard_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4})
+	</insert>
+	
+	<select id="questionListDao" resultType="com.mjcompany.home.dto.BoardDto">
+		SELECT * FROM web_board ORDER BY bnum DESC 
+	</select>
+	
 </mapper>
