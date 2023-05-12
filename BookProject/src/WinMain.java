@@ -178,9 +178,29 @@ public class WinMain extends JDialog {
 		popupMenu.add(mnuDetail);
 		
 		JMenuItem mnuDelete = new JMenuItem("삭제...");
+		mnuDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				String sISBN = table.getValueAt(row, 0).toString();
+				
+				WinBookDelete winBookDelete = new WinBookDelete(sISBN);
+				winBookDelete.setModal(true);
+				winBookDelete.setVisible(true);
+			}
+		});
 		popupMenu.add(mnuDelete);
 		
 		JMenuItem mnuUpdate = new JMenuItem("변경...");
+		mnuUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				String sISBN = table.getValueAt(row, 0).toString();
+				
+				WinBookUpdate winBookUpdate = new WinBookUpdate(sISBN);
+				winBookUpdate.setModal(true);
+				winBookUpdate.setVisible(true);
+			}
+		});
 		popupMenu.add(mnuUpdate);
 		scrollPane.setViewportView(table);
 		

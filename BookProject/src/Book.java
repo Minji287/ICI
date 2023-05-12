@@ -39,6 +39,7 @@ public class Book extends JPanel {
 	private JButton btnCalendar;
 	private JComboBox cbPublisher;
 	private String filePath;
+	private String strImage;
 	
 	public Book() {
 		setBackground(new Color(230, 230, 250));
@@ -50,17 +51,8 @@ public class Book extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount() == 2) { // 더블클릭하여 그림 선택
-					JFileChooser chooser = new JFileChooser("C:\\Users\\ici\\Pictures");
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("그림파일", "jpg", "png", "gif");
-					chooser.setFileFilter(filter);
-					if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-						filePath = chooser.getSelectedFile().getPath();
-						ImageIcon icon = new ImageIcon(filePath);
-						Image image = icon.getImage();
-						image = image.getScaledInstance(200, 250, Image.SCALE_SMOOTH);
-						icon = new ImageIcon(image);
-						lblImage.setIcon(icon);
-					}
+					strImage = JOptionPane.showInputDialog("책의 URL을 입력하시오");
+					lblImage.setText("<html><body><img src='" + strImage + "' width=200 height=250></body></html>");
 				}
 			}
 		});
@@ -177,9 +169,13 @@ public class Book extends JPanel {
 				if(btnType.getText().equals("도서 추가")) {
 					insertBook();
 				} else if(btnType.getText().equals("도서 삭제")) {
-					deleteBook();
+					if(JOptionPane.showConfirmDialog(null, "정말 삭제하시겠습니까?") == JOptionPane.YES_OPTION) {
+						deleteBook();
+					}
 				} else if(btnType.getText().equals("도서 변경")) {
-					updateBook();
+					if(JOptionPane.showConfirmDialog(null, "변경하시겠습니까?") == JOptionPane.YES_OPTION) {
+						updateBook();
+					}
 				}
 			}
 		});
@@ -244,17 +240,17 @@ public class Book extends JPanel {
 			
 			PreparedStatement pstmt = con.prepareStatement(sql);
 
-			pstmt.setString(1, tfTitle.getText().toString());
-			pstmt.setString(2, tfAuthor.getText().toString());
+			pstmt.setString(1, tfTitle.getText());
+			pstmt.setString(2, tfAuthor.getText());
 			pstmt.setString(3, cbPublisher.getSelectedItem().toString());
-			pstmt.setString(4, filePath);
-			pstmt.setString(5, tfPdate.getText().toString());
+			pstmt.setString(4, strImage);
+			pstmt.setString(5, tfPdate.getText());
 			
 			tfDiscount.setText(tfDiscount.getText().replaceAll(",", ""));
-			pstmt.setString(6, tfDiscount.getText().toString());
+			pstmt.setString(6, tfDiscount.getText());
 			
-			pstmt.setString(7, taDescription.getText().toString());
-			pstmt.setString(8, tfISBN.getText().toString());
+			pstmt.setString(7, taDescription.getText());
+			pstmt.setString(8, tfISBN.getText());
 			
 			if(pstmt.executeUpdate() >= 0) {
 				JOptionPane.showMessageDialog(null, "변경되었습니다.");
@@ -284,7 +280,7 @@ public class Book extends JPanel {
 			if(pstmt.executeUpdate() >= 0) {
 				JOptionPane.showMessageDialog(null, "삭제되었습니다.");
 			} else {
-				JOptionPane.showMessageDialog(null, "질의어 오류인것 같습니다. \n확인하세요!");
+				JOptionPane.showMessageDialog(null, "오류!");
 			}
 			
 		} catch (ClassNotFoundException | SQLException e1) {
@@ -319,7 +315,7 @@ public class Book extends JPanel {
 			if(pstmt.executeUpdate() >= 0) {
 				JOptionPane.showMessageDialog(null, "등록되었습니다.");
 			} else {
-				JOptionPane.showMessageDialog(null, "질의어 오류인것 같습니다. \n확인하세요!");
+				JOptionPane.showMessageDialog(null, "오류!");
 			}
 			
 		} catch (ClassNotFoundException | SQLException e1) {
@@ -462,5 +458,57 @@ public class Book extends JPanel {
 			btnType.setText("도서 변경");
 			btnDup.setEnabled(false);
 		}
+	}
+
+	public Book(int number, String sISBN) {
+		this(number);
+		tfISBN.setText(sISBN);
+		tfISBN.setEnabled(false); // 삭제, 변경시는 활성화할 필요가 없기 때문에
+		
+		btnDup.setEnabled(false);
+		tfTitle.setEnabled(true);
+		tfAuthor.setEnabled(true);
+		cbPublisher.setEnabled(true);
+		tfPdate.setEnabled(true);
+		tfDiscount.setEnabled(true);
+		taDescription.setEnabled(true);
+		btnType.setEnabled(true);
+		if(number == 2) {
+			btnCalendar.setEnabled(false);
+		}
+		else if(number == 3) { // update
+			btnCalendar.setVisible(true);
+			btnCalendar.setEnabled(true);
+		}
+		
+		showRecord(sISBN);
+	}
+
+	private void showRecord(String sISBN) {
+		//=================================
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
+			Statement stmt = con.createStatement();
+			
+			String sql = "SELECT * FROM bookTBL WHERE isbn='" + sISBN + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				tfTitle.setText(rs.getString("title"));
+				tfAuthor.setText(rs.getString("author"));
+				cbPublisher.setSelectedItem(rs.getString("publisher"));
+				strImage = rs.getString("image");
+				lblImage.setText("<html><body><img src='" + strImage + "' width=200 height=250></body></html>)");
+				tfPdate.setText(rs.getString("pDate"));
+				tfDiscount.setText(rs.getString("discount"));
+				taDescription.setText(rs.getString("description"));
+			}
+			
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//=================================
 	}
 }

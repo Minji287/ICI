@@ -18,6 +18,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TodoList extends JDialog {
 
@@ -100,6 +102,7 @@ public class TodoList extends JDialog {
 					tfTodo5.setText("");
 					tfTodo6.setText("");
 					taMemo.setText("");
+					taDone.setText("");
 				}
 			}
 		});
@@ -107,6 +110,11 @@ public class TodoList extends JDialog {
 		getContentPane().add(btnDeleteAll);
 		
 		chbxTodo1 = new JCheckBox("");
+		chbxTodo1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tfTodo1.setEditable(false);*
+			}
+		});
 		chbxTodo1.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		chbxTodo1.setBounds(28, 61, 21, 51);
 		getContentPane().add(chbxTodo1);
