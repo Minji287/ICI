@@ -14,6 +14,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
 
+import member.WinMemberAdd;
+import member.WinMemberRemove;
+import member.WinMemberUpdate;
+
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -31,6 +35,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowEvent;
+import javax.swing.JSeparator;
 
 public class WinMain extends JDialog {
 	private JTable table;
@@ -91,7 +96,7 @@ public class WinMain extends JDialog {
 		});
 		mnuBookManager.add(mnuBookAdd);
 		
-		JMenuItem mnuBookRemove = new JMenuItem("도서 삭제");
+		JMenuItem mnuBookRemove = new JMenuItem("도서 삭제...");
 		mnuBookRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
@@ -111,7 +116,7 @@ public class WinMain extends JDialog {
 		});
 		mnuBookManager.add(mnuBookRemove);
 		
-		JMenuItem mnuBookUpdate = new JMenuItem("도서 변경");
+		JMenuItem mnuBookUpdate = new JMenuItem("도서 변경...");
 		mnuBookUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
@@ -131,7 +136,7 @@ public class WinMain extends JDialog {
 		});
 		mnuBookManager.add(mnuBookUpdate);
 		
-		JMenuItem mnuBookSelect = new JMenuItem("도서 조회");
+		JMenuItem mnuBookSelect = new JMenuItem("도서 조회...");
 		mnuBookSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
@@ -165,6 +170,57 @@ public class WinMain extends JDialog {
 			}
 		});
 		mnuBookManager.add(mnuAllShow);
+		
+		JMenu mnuMemberManager = new JMenu("회원관리");
+		menuBar.add(mnuMemberManager);
+		
+		JMenuItem mnuMemberAdd = new JMenuItem("회원 가입...");
+		mnuMemberAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinMemberAdd winMemberAdd = new WinMemberAdd();
+				winMemberAdd.setModal(true);
+				winMemberAdd.setVisible(true);
+			}
+		});
+		mnuMemberManager.add(mnuMemberAdd);
+		
+		JMenuItem mnuMemberRemove = new JMenuItem("회원 삭제...");
+		mnuMemberRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinMemberRemove winMemberRemove = new WinMemberRemove();
+				winMemberRemove.setModal(true);
+				winMemberRemove.setVisible(true);
+			}
+		});
+		mnuMemberManager.add(mnuMemberRemove);
+		
+		JMenuItem mnuMemberUpdate = new JMenuItem("회원 변경...");
+		mnuMemberUpdate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WinMemberUpdate winMemberUpdate = new WinMemberUpdate();
+				winMemberUpdate.setModal(true);
+				winMemberUpdate.setVisible(true);
+			}
+		});
+		mnuMemberManager.add(mnuMemberUpdate);
+		
+		JMenuItem mnuMemberSelect = new JMenuItem("회원 조회...");
+		mnuMemberSelect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WinMemberUpdate winMemberUpdate = new WinMemberUpdate();
+				winMemberUpdate.setModal(true);
+				winMemberUpdate.setVisible(true);
+			}
+		});
+		mnuMemberManager.add(mnuMemberSelect);
+		
+		JSeparator separator = new JSeparator();
+		mnuMemberManager.add(separator);
+		
+		JMenuItem mnuMemberAllShow = new JMenuItem("모든 회원 보기...");
+		mnuMemberManager.add(mnuMemberAllShow);
 		
 		JMenu mnNewMenu = new JMenu("Help");
 		mnNewMenu.setMnemonic('H');
