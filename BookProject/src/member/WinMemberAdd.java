@@ -30,7 +30,11 @@ public class WinMemberAdd extends JDialog {
 		setBounds(100, 100, 565, 415);
 		
 		setTitle("회원 가입");
-		Member member = new Member();
+	}
+
+	public WinMemberAdd(int type) {
+		this();
+		Member member = new Member(type);
 		getContentPane().add(member);
 	}
 

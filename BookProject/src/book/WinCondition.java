@@ -1,3 +1,4 @@
+package book;
 import java.awt.EventQueue;
 
 import javax.swing.JDialog;

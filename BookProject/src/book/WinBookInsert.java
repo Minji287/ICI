@@ -1,8 +1,9 @@
+package book;
 import java.awt.EventQueue;
 
 import javax.swing.JDialog;
 
-public class WinBookUpdate extends JDialog {
+public class WinBookInsert extends JDialog {
 
 	/**
 	 * Launch the application.
@@ -11,7 +12,7 @@ public class WinBookUpdate extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WinBookUpdate dialog = new WinBookUpdate();
+					WinBookInsert dialog = new WinBookInsert();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -24,15 +25,11 @@ public class WinBookUpdate extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public WinBookUpdate() {
-		this("");
-	}
-
-	public WinBookUpdate(String sISBN) {
-		setTitle("도서 변경");
-		setBounds(100, 100, 627, 654);
+	public WinBookInsert() {
+		setTitle("도서 추가");
+		setBounds(100, 100, 635, 653);
 		
-		Book book = new Book(3, sISBN);
+		Book book = new Book(1);
 		getContentPane().add(book);
 	}
 

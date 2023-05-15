@@ -1,3 +1,4 @@
+package util;
 import java.awt.EventQueue;
 
 import javax.swing.JDialog;
@@ -259,6 +260,7 @@ public class WinCalendar extends JDialog {
 					JButton btn1 = (JButton)e.getSource();
 					selectedDate = year + "-" + month + "-" + btn1.getText();
 					System.out.println(selectedDate);
+					dispose();
 				}
 			});
 			if(year == gYear && month == gMonth	&& i == gDay)

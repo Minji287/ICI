@@ -30,7 +30,11 @@ public class WinMemberUpdate extends JDialog {
 		setBounds(100, 100, 565, 415);
 		
 		setTitle("회원 변경");
-		Member member = new Member();
+	}
+
+	public WinMemberUpdate(int type) {
+		this();
+		Member member = new Member(type);
 		getContentPane().add(member);
 	}
 

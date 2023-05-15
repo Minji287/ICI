@@ -30,7 +30,12 @@ public class WinMemberRemove extends JDialog {
 		setBounds(100, 100, 565, 415);
 		
 		setTitle("회원 탈퇴");
-		Member member = new Member();
+		
+	}
+
+	public WinMemberRemove(int type) {
+		this();
+		Member member = new Member(type);
 		getContentPane().add(member);
 	}
 

@@ -1,4 +1,13 @@
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -6,36 +15,29 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
 
+import book.WinBookDelete;
+import book.WinBookDetail;
+import book.WinBookDetails;
+import book.WinBookInsert;
+import book.WinBookUpdate;
+import book.WinCondition;
 import member.WinMemberAdd;
 import member.WinMemberRemove;
+import member.WinMemberSelect;
 import member.WinMemberUpdate;
-
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowEvent;
-import javax.swing.JSeparator;
 
 public class WinMain extends JDialog {
 	private JTable table;
@@ -177,7 +179,7 @@ public class WinMain extends JDialog {
 		JMenuItem mnuMemberAdd = new JMenuItem("회원 가입...");
 		mnuMemberAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WinMemberAdd winMemberAdd = new WinMemberAdd();
+				WinMemberAdd winMemberAdd = new WinMemberAdd(1);
 				winMemberAdd.setModal(true);
 				winMemberAdd.setVisible(true);
 			}
@@ -187,7 +189,7 @@ public class WinMain extends JDialog {
 		JMenuItem mnuMemberRemove = new JMenuItem("회원 삭제...");
 		mnuMemberRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WinMemberRemove winMemberRemove = new WinMemberRemove();
+				WinMemberRemove winMemberRemove = new WinMemberRemove(2);
 				winMemberRemove.setModal(true);
 				winMemberRemove.setVisible(true);
 			}
@@ -198,7 +200,7 @@ public class WinMain extends JDialog {
 		mnuMemberUpdate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				WinMemberUpdate winMemberUpdate = new WinMemberUpdate();
+				WinMemberUpdate winMemberUpdate = new WinMemberUpdate(3);
 				winMemberUpdate.setModal(true);
 				winMemberUpdate.setVisible(true);
 			}
@@ -209,9 +211,9 @@ public class WinMain extends JDialog {
 		mnuMemberSelect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				WinMemberUpdate winMemberUpdate = new WinMemberUpdate();
-				winMemberUpdate.setModal(true);
-				winMemberUpdate.setVisible(true);
+				WinMemberSelect winMemberSelect = new WinMemberSelect(4);
+				winMemberSelect.setModal(true);
+				winMemberSelect.setVisible(true);
 			}
 		});
 		mnuMemberManager.add(mnuMemberSelect);
