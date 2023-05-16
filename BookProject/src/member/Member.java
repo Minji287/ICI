@@ -60,6 +60,7 @@ public class Member extends JPanel {
 	private boolean bOne;
 	private int zero;
 	private String sEmail;
+	private JLabel lblPic;
 	
 	/**
 	 * Create the dialog.
@@ -69,7 +70,7 @@ public class Member extends JPanel {
 		setBounds(100, 100, 549, 389);
 		setLayout(null);
 		
-		JLabel lblPic = new JLabel("");
+		lblPic = new JLabel("");
 		lblPic.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -160,41 +161,25 @@ public class Member extends JPanel {
 					try {
 						Class.forName("com.mysql.cj.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
-
-						String sql = "SELECT COUNT(*) FROM memberTBL WHERE email=?";
+						Statement stmt = con.createStatement();
 						
-						PreparedStatement pstmt = con.prepareStatement(sql);
+						String sql = "select count(*) from memberTBL where email='" + sEmail + "'";
+						ResultSet rs = stmt.executeQuery(sql);
 						
-						pstmt.setString(1, sEmail);
-						
-						ResultSet rs = pstmt.executeQuery();
-						
-						bOne = false;
-						zero = 1;
 						while(rs.next()) {
-							if(rs.getInt(1) == 1) {
-								bOne = true;
-							} else if(rs.getInt(1) > 1) {
-								bOne = false;
-							} else {
+							if(rs.getInt(1) == 1)
+								bOne=true;
+							else if(rs.getInt(1) > 1)
+								bOne=false;
+							else
 								zero = 0;
-							}
-						}
-						
-						System.out.println(sql);
-						
-//						if(pstmt.executeUpdate() >= 0) {
-//							JOptionPane.showMessageDialog(null, "가입되었습니다.");
-//						} else {
-//							JOptionPane.showMessageDialog(null, "오류!");
-//						}
+						}						
 						
 					} catch (ClassNotFoundException | SQLException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					if(zero == 1 && bOne) {
-						showRecord();
+						showRecord(sEmail);
 					}
 					//=================================
 				}
@@ -380,19 +365,18 @@ public class Member extends JPanel {
 		add(btnMemberChoice);
 
 	}
-	protected void showRecord() {
+	protected void showRecord(String sEmail) {
 		//=================================
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
-	
 			Statement stmt = con.createStatement();
 			
-			String sql = "SELECT * FROM memberTBL WHERE email='" + sEmail + "'";
+			String sql = "select * from memberTBL where email='" + sEmail + "'";
 			ResultSet rs = stmt.executeQuery(sql);
-			
 			while(rs.next()) {
 				tfId.setText(rs.getString("id"));
+				//tfPassword는 삭제를 결정했을 때 인증 수단으로 써 보자.
 				tfName.setText(rs.getString("name"));
 				tfMobile.setText(rs.getString("mobile"));
 				tfBirth.setText(rs.getString("birth"));
@@ -402,13 +386,15 @@ public class Member extends JPanel {
 				} else {
 					chkSolarLunar.setSelected(true);
 				}
+				
+				filePath = rs.getString("pic");
+				ImageIcon icon = new ImageIcon(filePath);
+				Image image = icon.getImage();
+				image = image.getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+				icon = new ImageIcon(image);
+				lblPic.setIcon(icon);
+				filePath = filePath.replaceAll("\\\\","\\\\\\\\\\\\\\\\" );
 			}
-			
-	//					if(pstmt.executeUpdate() >= 0) {
-	//						JOptionPane.showMessageDialog(null, "탈퇴하셨습니다.");
-	//					} else {
-	//						JOptionPane.showMessageDialog(null, "오류!");
-	//					}
 			
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
@@ -428,13 +414,11 @@ public class Member extends JPanel {
 			
 			pstmt.setString(1, tfId.getText());
 			
-			System.out.println(sql);
-			
-//			if(pstmt.executeUpdate() >= 0) {
-//				JOptionPane.showMessageDialog(null, "탈퇴하셨습니다.");
-//			} else {
-//				JOptionPane.showMessageDialog(null, "오류!");
-//			}
+			if(pstmt.executeUpdate() >= 0) {
+				JOptionPane.showMessageDialog(null, "탈퇴하셨습니다.");
+			} else {
+				JOptionPane.showMessageDialog(null, "오류!");
+			}
 			
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block
@@ -463,7 +447,7 @@ public class Member extends JPanel {
 			pstmt.setString(6, tfBirth.getText());
 			
 			String check = "0";
-			if(!chkSolarLunar.isSelected()) {
+			if(chkSolarLunar.isSelected()) {
 				check = "1";
 			}
 			pstmt.setString(7, check);
@@ -472,13 +456,11 @@ public class Member extends JPanel {
 			pstmt.setString(8, address);
 			pstmt.setString(9, filePath);
 			
-			System.out.println(sql);
-			
-//			if(pstmt.executeUpdate() >= 0) {
-//				JOptionPane.showMessageDialog(null, "가입되었습니다.");
-//			} else {
-//				JOptionPane.showMessageDialog(null, "오류!");
-//			}
+			if(pstmt.executeUpdate() >= 0) {
+				JOptionPane.showMessageDialog(null, "가입되었습니다.");
+			} else {
+				JOptionPane.showMessageDialog(null, "오류!");
+			}
 			
 		} catch (ClassNotFoundException | SQLException e1) {
 			// TODO Auto-generated catch block

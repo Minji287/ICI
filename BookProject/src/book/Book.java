@@ -303,17 +303,17 @@ public class Book extends JPanel {
 			
 			PreparedStatement pstmt = con.prepareStatement(sql);
 
-			pstmt.setString(1, tfISBN.getText().toString());
-			pstmt.setString(2, tfTitle.getText().toString());
-			pstmt.setString(3, tfAuthor.getText().toString());
+			pstmt.setString(1, tfISBN.getText());
+			pstmt.setString(2, tfTitle.getText());
+			pstmt.setString(3, tfAuthor.getText());
 			pstmt.setString(4, cbPublisher.getSelectedItem().toString());
 			pstmt.setString(5, filePath);
-			pstmt.setString(6, tfPdate.getText().toString());
+			pstmt.setString(6, tfPdate.getText());
 			
 			tfDiscount.setText(tfDiscount.getText().replaceAll(",", ""));
-			pstmt.setString(7, tfDiscount.getText().toString());
+			pstmt.setString(7, tfDiscount.getText());
 			
-			pstmt.setString(8, taDescription.getText().toString());
+			pstmt.setString(8, taDescription.getText());
 			
 			if(pstmt.executeUpdate() >= 0) {
 				JOptionPane.showMessageDialog(null, "등록되었습니다.");
