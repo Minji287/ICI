@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+ <mapper namespace="com.rubato.home.dao.IDao">
+ 
+ 	<!-- 게시판 관련 -->
+ 	<insert id="boardWriteDao">
+ 		INSERT INTO
+ 			rubafreeboard(bnum, bname, btitle, bcontent, bhit, buserid, breplycount, bfilecount)
+ 				VALUES
+ 					(rfb_seq.nextval, #{param1}, #{param2}, #{param3}, 0, #{param4}, 0, #{param5})
+ 	</insert>
+ 	
+ 	<select id="boardListDao" resultType="com.rubato.home.dto.RFboardDto">
+ 		SELECT * FROM rubafreeboard ORDER BY bnum DESC
+ 	</select>
+ 	
+ 	<select id="boardTotlaCountDao" resultType="int">
+ 		SELECT COUNT(*) FROM rubafreeboard
+ 	</select>
+ 	
+ 	<select id="boardContentViewDao" resultType="com.rubato.home.dto.RFboardDto">
+ 		SELECT * FROM rubafreeboard WHERE bnum=#{param1}
+ 	</select>
+ 	
+ 	<update id="boardHitDao">
+ 		UPDATE rubafreeboard SET bhit=bhit+1 WHERE bnum=#{param1}
+ 	</update>
+ 	
+ 	<!-- 게시판 검색 -->
+ 	<select id="boardSearchTitleDao" resultType="com.rubato.home.dto.RFboardDto">
+ 		SELECT * FROM rubafreeboard WHERE btitle LIKE '%' || #{param1} || '%' ORDER BY bnum DESC
+ 	</select>
+ 	
+ 	<select id="boardSearchContentDao" resultType="com.rubato.home.dto.RFboardDto">
+ 		SELECT * FROM rubafreeboard WHERE bcontent LIKE '%' || #{param1} || '%' ORDER BY bnum DESC
+ 	</select>
+ 	
+ 	<select id="boardSearchWriterDao" resultType="com.rubato.home.dto.RFboardDto">
+ 		SELECT * FROM rubafreeboard WHERE bname LIKE '%' || #{param1} || '%' ORDER BY bnum DESC
+ 	</select>
+ 	
+ 	<!-- 댓글 관련 -->
+ 	<insert id="replyWriteDao">
+ 		INSERT INTO
+ 			rubareply(rnum, rcontent, rid, rorinum)
+ 				VALUES(rfr_seq.nextval, #{param1}, '운영자', #{param2})
+ 	</insert>
+ 	
+ 	<update id="replyCountDao">
+ 		UPDATE rubafreeboard SET breplycount=breplycount+1 WHERE bnum=#{param1}
+ 	</update>
+ 
+ </mapper>
