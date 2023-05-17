@@ -100,4 +100,30 @@ public class HomeController {
 		
 		return "board_view";
 	}
+	
+	@RequestMapping(value = "/board_delete")
+	public String board_delete(HttpServletRequest request, Model model) {
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		dao.boardDeleteDao(request.getParameter("bnum"));
+		dao.replyDeleteAllDao(request.getParameter("bnum"));
+		
+		return "redirect:board_list";
+	}
+	
+	@RequestMapping(value = "/replyDelete")
+	public String replyDelete(HttpServletRequest request, Model model) {
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		dao.replyDeleteDao(request.getParameter("rnum"));
+		
+		dao.replyDeleteCount(request.getParameter("rorinum")); // 원글의 댓글 수를 1 감소
+		
+		model.addAttribute("boardDto", dao.boardContentViewDao(request.getParameter("rorinum")));
+		model.addAttribute("replyList", dao.replyListDao(request.getParameter("rorinum")));
+		
+		return "board_view";
+	}
 }

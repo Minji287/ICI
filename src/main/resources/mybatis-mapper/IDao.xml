@@ -58,5 +58,20 @@
  		SELECT * FROM rubareply WHERE rorinum=#{param1} ORDER BY rnum ASC
  	</select>
  	
+ 	<delete id="boardDeleteDao">
+ 		DELETE FROM rubafreeboard WHERE bnum=#{param1}
+ 	</delete>
+ 	
+ 	<delete id="replyDeleteDao">
+ 		DELETE FROM rubareply WHERE rnum=#{param1}
+ 	</delete>
+ 	
+ 	<delete id="replyDeleteAllDao">
+ 		DELETE FROM rubareply WHERE rorinum=#{param1}
+ 	</delete>
+ 	
+ 	<update id="replyDeleteCount">
+ 		UPDATE rubafreeboard SET breplycount=breplycount-1 WHERE bnum=#{param1}
+ 	</update>
  
  </mapper>

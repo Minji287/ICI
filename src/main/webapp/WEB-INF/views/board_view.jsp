@@ -81,7 +81,7 @@
 	        		<td align="center">${replyDto.rid }</td>
 	        		<td width="70%">${replyDto.rcontent }<br><br>${replyDto.rdate }</td>
 	        		<td align="center">
-						<input type="button" value="삭제" onclick="script:window.location.href='replyDelete?rnum=${replyDto.rnum }'">
+						<input type="button" value="삭제" onclick="script:window.location.href='replyDelete?rnum=${replyDto.rnum }&rorinum=${boardDto.bnum }'">
 					</td> 
 	        	</tr>
 	        </c:forEach>
@@ -96,7 +96,7 @@
 	        </div>
 	    </form>
         <div id="buttons">
-          <a href="#"><img src="/resources/img/delete.png"></a>
+          <a href="board_delete?bnum=${boardDto.bnum }"><input type="image" src="/resources/img/delete.png"></a>
           <a href="board_list"><img src="/resources/img/list.png"></a>
           <a href="board_write"><img src="/resources/img/write.png"></a>
         </div>
