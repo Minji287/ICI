@@ -21,7 +21,7 @@ public class PageDto {
 		this.criteria = criteria;
 		this.total = total;
 		
-		this.endPage = (int)Math.ceil((criteria.getPageNum()/5.0) * 5); // ceil->올림
+		this.endPage = (int) (Math.ceil((criteria.getPageNum() / (criteria.getAmount()*1.0))) * criteria.getAmount()); // ceil->올림
 		this.startPage = this.endPage - 4;
 		
 		// 실제 끝 페이지 계산(총 글의 수 / 한 페이지당 출력될 글의 수 = 올림한 정수)

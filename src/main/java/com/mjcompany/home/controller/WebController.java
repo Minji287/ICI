@@ -197,7 +197,7 @@ public class WebController {
 		
 		model.addAttribute("pageMaker", pageDto);
 		model.addAttribute("boardDtos", boardDtos);
-//		model.addAttribute("", boardDtos)
+		model.addAttribute("currPage", pageNum);
 		
 		return "list";
 	}
