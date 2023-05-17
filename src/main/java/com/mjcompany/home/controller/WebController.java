@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mjcompany.home.dao.IDao;
 import com.mjcompany.home.dto.BoardDto;
+import com.mjcompany.home.dto.Criteria;
 import com.mjcompany.home.dto.MemberDto;
+import com.mjcompany.home.dto.PageDto;
 
 @Controller
 public class WebController {
@@ -171,13 +173,31 @@ public class WebController {
 	}
 	
 	@RequestMapping(value = "/list")
-	public String list(Model model) {
+	public String list(Model model, Criteria criteria, HttpServletRequest request) {
+		int pageNum = 0;
+		
+		// 처음에는 request 객체에 넘어오는 값이 없기 떄문에 null 값이 옴
+		if(request.getParameter("pageNum") == null) {
+			pageNum = 1;
+			criteria.setPageNum(pageNum);
+		} else {
+			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+			criteria.setPageNum(pageNum);
+		}
 		
 		IDao dao = sqlSession.getMapper(IDao.class);
 		
-		List<BoardDto> boardDtos = dao.questionListDao();
+		int total = dao.boardAllCountDao(); // 모든 글의 개수
 		
+		PageDto pageDto = new PageDto(criteria, total);
+		
+		dao.questionListDao(criteria.getAmount(), pageNum);
+		
+		List<BoardDto> boardDtos = dao.questionListDao(criteria.getAmount(), pageNum);
+		
+		model.addAttribute("pageMaker", pageDto);
 		model.addAttribute("boardDtos", boardDtos);
+//		model.addAttribute("", boardDtos)
 		
 		return "list";
 	}

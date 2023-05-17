@@ -31,11 +31,11 @@
 	</insert>
 	
 	<select id="questionListDao" resultType="com.mjcompany.home.dto.BoardDto">
-		SELECT * FROM
-			(SELECT A.*, FLOOR((ROWNUM-1) / #{amount} + 1)PAGE, ROWNUM
+		SELECT * FROM <!-- param1 = amount는 한 페이지당 보이는 글의 개수 -->
+			(SELECT A.*, FLOOR(((ROWNUM-1) / #{param1}) + 1)PAGE, ROWNUM
 				FROM
 					(SELECT * from web_board ORDER BY bnum DESC)A)
-						WHERE PAGE=#{pageNum}
+						WHERE PAGE=#{param2}
 	</select>
 	
 	<select id="contentViewDao" resultType="com.mjcompany.home.dto.BoardDto">
@@ -45,5 +45,9 @@
 	<delete id="deleteDao">
 		DELETE FROM web_board WHERE bnum=${param1}
 	</delete>
+	
+	<select id="boardAllCountDao" resultType="int">
+		SELECT COUNT(*) FROM web_board
+	</select>
 	
 </mapper>
