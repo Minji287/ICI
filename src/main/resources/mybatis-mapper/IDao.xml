@@ -53,5 +53,10 @@
  	<update id="replyCountDao">
  		UPDATE rubafreeboard SET breplycount=breplycount+1 WHERE bnum=#{param1}
  	</update>
+ 	
+ 	<select id="replyListDao" resultType="com.rubato.home.dto.RreplyDto">
+ 		SELECT * FROM rubareply WHERE rorinum=#{param1} ORDER BY rnum ASC
+ 	</select>
+ 	
  
  </mapper>

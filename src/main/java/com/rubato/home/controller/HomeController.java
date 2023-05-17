@@ -40,6 +40,7 @@ public class HomeController {
 		dao.boardHitDao(request.getParameter("bnum")); // 조회수 증가
 		
 		model.addAttribute("boardDto", dao.boardContentViewDao(request.getParameter("bnum")));
+		model.addAttribute("replyList", dao.replyListDao(request.getParameter("bnum")));
 		
 		return "board_view";
 	}
@@ -94,6 +95,9 @@ public class HomeController {
 
 		dao.replyCountDao(request.getParameter("rorinum")); // 원글의 댓글 수를 1 증가
 		
-		return "redirect:board_list";
+		model.addAttribute("boardDto", dao.boardContentViewDao(request.getParameter("rorinum")));
+		model.addAttribute("replyList", dao.replyListDao(request.getParameter("rorinum")));
+		
+		return "board_view";
 	}
 }

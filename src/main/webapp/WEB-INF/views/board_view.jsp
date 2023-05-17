@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +75,17 @@
           ${boardDto.bcontent }
         </p>
         
+        <table border="1" cellpadding="0" cellspacing="0" width="750">
+        	<c:forEach items="${replyList }" var="replyDto">
+	        	<tr>
+	        		<td align="center">${replyDto.rid }</td>
+	        		<td width="70%">${replyDto.rcontent }<br><br>${replyDto.rdate }</td>
+	        		<td align="center">
+						<input type="button" value="삭제" onclick="script:window.location.href='replyDelete?rnum=${replyDto.rnum }'">
+					</td> 
+	        	</tr>
+	        </c:forEach>
+        </table>
         
         <form action="reply_write">
         <input type="hidden" name="rorinum" value="${boardDto.bnum }">
