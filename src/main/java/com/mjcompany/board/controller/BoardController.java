@@ -1,11 +1,13 @@
 package com.mjcompany.board.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mjcompany.board.entity.Question;
@@ -17,9 +19,14 @@ public class BoardController {
 	@Autowired
 	private QuestionRepository questionRepository;
 	
+	@RequestMapping(value = "/")
+	public String form() {
+		return "redirect:questionList";
+	}
+	
 	@RequestMapping(value = "/index")
 	public String index() {
-		return "redirect:list";
+		return "redirect:questionList";
 	}
 	
 	@RequestMapping(value = "/question_form")
@@ -37,6 +44,17 @@ public class BoardController {
 		
 		questionRepository.save(question); // insert(질문글 저장)
 		
-		return "redirect:list";
+		return "redirect:questionList";
+	}
+	
+	@RequestMapping(value = "/questionList")
+	public String questionList(Model model) {
+		
+		// SELECT * FROM question
+		List<Question> questionList = questionRepository.findAll();
+		
+		model.addAttribute("questionList", questionList);
+		
+		return "question_list";
 	}
 }
