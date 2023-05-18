@@ -80,6 +80,13 @@
         	<a href="/resources/uploadfiles/${fileDto.filename }" download>${fileDto.fileoriname }</a>
         </p>
         <br>
+        <!-- 이미지가 첨부되면 미리보기 기능 -->
+        <c:if test="${fileDto.fileextension == 'jpg' or fileDto.fileextension == 'png'
+        		or fileDto.fileextension == 'bmp' or fileDto.fileextension == 'gif' }">
+        	<br>
+        		<img width="300" src="/resources/uploadfiles/${fileDto.filename }">
+        	<br>
+        </c:if>
         
         
         <table border="1" cellpadding="0" cellspacing="0" width="750">
