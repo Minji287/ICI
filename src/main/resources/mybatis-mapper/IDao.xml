@@ -69,9 +69,20 @@
  	<delete id="replyDeleteAllDao">
  		DELETE FROM rubareply WHERE rorinum=#{param1}
  	</delete>
- 	
+ 		
  	<update id="replyDeleteCount">
  		UPDATE rubafreeboard SET breplycount=breplycount-1 WHERE bnum=#{param1}
  	</update>
+ 	
+ 	<!-- 파일 업로드 관련 -->
+ 	<insert id="fileInfoCreateDao">
+ 		INSERT INTO
+ 			rubafiles(filenum, forinum, fileoriname, filename, fileextension, fileurl)
+	 			VALUES (rffile_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4}, #{param5})
+ 	</insert>
+ 	
+ 	<select id="getFileInfoDto" resultType="com.rubato.home.dto.FileDto">
+ 		SELECT * FROM rubafiles WHERE forinum=#{param1}
+ 	</select>
  
  </mapper>

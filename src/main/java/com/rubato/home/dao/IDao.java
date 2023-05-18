@@ -2,6 +2,7 @@ package com.rubato.home.dao;
 
 import java.util.List;
 
+import com.rubato.home.dto.FileDto;
 import com.rubato.home.dto.RFboardDto;
 import com.rubato.home.dto.RreplyDto;
 
@@ -28,4 +29,7 @@ public interface IDao {
 	public void replyDeleteAllDao(String rorinum);
 	public void replyDeleteCount(String bnum);
 	
+	// 파일 첨부 관련 기능
+	public void fileInfoCreateDao(int forinum, String fileoriname, String filename, String fileextension, String fileurl);
+	public FileDto getFileInfoDto(String forinum); // 파일이 첨부된 글의 번호로 검색하여 파일 정보 가져오기
 }

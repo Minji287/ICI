@@ -75,6 +75,13 @@
           ${boardDto.bcontent }
         </p>
         
+        <p id="file_info">
+        	※ 첨부파일 : 
+        	<a href="/resources/uploadfiles/${fileDto.filename }" download>${fileDto.fileoriname }</a>
+        </p>
+        <br>
+        
+        
         <table border="1" cellpadding="0" cellspacing="0" width="750">
         	<c:forEach items="${replyList }" var="replyDto">
 	        	<tr>
