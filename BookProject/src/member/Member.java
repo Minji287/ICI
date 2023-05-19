@@ -61,6 +61,7 @@ public class Member extends JPanel {
 	private int zero;
 	private String sEmail;
 	private JLabel lblPic;
+	private JButton btnDup;
 	
 	/**
 	 * Create the dialog.
@@ -82,13 +83,12 @@ public class Member extends JPanel {
 						
 						filePath = chooser.getSelectedFile().getPath();
 						
-						filePath = filePath.replaceAll("\\\\", "\\\\\\\\");
-						
 						ImageIcon icon = new ImageIcon(filePath);
 			            Image image = icon.getImage();
 			            image = image.getScaledInstance(150, 200, image.SCALE_SMOOTH);
 			            icon = new ImageIcon(image);
 			            lblPic.setIcon(icon);
+			            filePath = filePath.replaceAll("\\\\", "\\\\\\\\");
 					}
 				}
 			}
@@ -108,7 +108,20 @@ public class Member extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					tfPassword.requestFocus();
+					if(number == 1) { // 회원 등록
+						if(isDup()) {
+							JOptionPane.showMessageDialog(null, "이미 존재하는 아이디 입니다.");
+							tfId.setSelectionStart(0);
+							tfId.setSelectionEnd(tfId.getText().length());
+							tfId.requestFocus();
+						} else {
+							JOptionPane.showMessageDialog(null, "사용 가능한 아이디 입니다.");
+							tfPassword.requestFocus();
+						}
+					} else if(number == 2 || number == 3) {
+						// id(primary key)를 조회하여 보여준다
+						showRecord(tfId.getText(), 1);
+					}
 				}
 			}
 		});
@@ -133,7 +146,16 @@ public class Member extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					tfEmail.requestFocus();
+					if(number == 1) {
+						tfEmail.requestFocus();
+					} else {
+						// 이름을 찾아 선택하여 자세히 보여주기(id)
+						ShowList showList = new ShowList(tfName.getText());
+						showList.setModal(true);
+						showList.setVisible(true);
+						
+						showRecord(showList.getID(), 1); // ID: 1, Email: 2
+					}
 				}
 			}
 		});
@@ -141,7 +163,20 @@ public class Member extends JPanel {
 		tfName.setBounds(280, 136, 116, 21);
 		add(tfName);
 		
-		JButton btnDup = new JButton("중복확인");
+		btnDup = new JButton("중복확인");
+		btnDup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(isDup()) {
+					JOptionPane.showMessageDialog(null, "이미 존재하는 아이디 입니다.");
+					tfId.setSelectionStart(0);
+					tfId.setSelectionEnd(tfId.getText().length());
+					tfId.requestFocus();
+				} else {
+					JOptionPane.showMessageDialog(null, "사용 가능한 아이디 입니다.");
+					tfPassword.requestFocus();
+				}
+			}
+		});
 		btnDup.setBounds(405, 42, 97, 23);
 		add(btnDup);
 		
@@ -155,33 +190,12 @@ public class Member extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					sEmail = tfEmail.getText() + "@" + cbEmail.getSelectedItem();
-					
-					//=================================
-					try {
-						Class.forName("com.mysql.cj.jdbc.Driver");
-						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
-						Statement stmt = con.createStatement();
-						
-						String sql = "select count(*) from memberTBL where email='" + sEmail + "'";
-						ResultSet rs = stmt.executeQuery(sql);
-						
-						while(rs.next()) {
-							if(rs.getInt(1) == 1)
-								bOne=true;
-							else if(rs.getInt(1) > 1)
-								bOne=false;
-							else
-								zero = 0;
-						}						
-						
-					} catch (ClassNotFoundException | SQLException e1) {
-						e1.printStackTrace();
+					if(number == 1) {
+						tfMobile.requestFocus();
+					} else {
+						sEmail = tfEmail.getText() + "@" + cbEmail.getSelectedItem();
+						showRecord(sEmail, 2);
 					}
-					if(zero == 1 && bOne) {
-						showRecord(sEmail);
-					}
-					//=================================
 				}
 			}
 		});
@@ -365,14 +379,45 @@ public class Member extends JPanel {
 		add(btnMemberChoice);
 
 	}
-	protected void showRecord(String sEmail) {
+	protected boolean isDup() {
+		//=================================
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
+	
+			String sql = "SELECT * FROM memberTBL WHERE id=?";
+			
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, tfId.getText());
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return true;
+			}
+			
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//=================================
+		return false;
+	}
+	protected void showRecord(String sValue, int type) {
 		//=================================
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
 			Statement stmt = con.createStatement();
 			
-			String sql = "select * from memberTBL where email='" + sEmail + "'";
+			String sql = "";
+			if(type == 1) {
+				sql = "select * from memberTBL where id='" + sValue + "'";
+			} else if(type == 2) {
+				sql = "select * from memberTBL where email='" + sValue + "'";
+			}
+			
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				tfId.setText(rs.getString("id"));
@@ -386,6 +431,10 @@ public class Member extends JPanel {
 				} else {
 					chkSolarLunar.setSelected(true);
 				}
+				
+				String temp = rs.getString("email");
+				tfEmail.setText(temp.substring(0, temp.indexOf("@")));
+				cbEmail.setSelectedItem(temp.substring(temp.indexOf("@")+1));
 				
 				filePath = rs.getString("pic");
 				ImageIcon icon = new ImageIcon(filePath);
@@ -403,21 +452,59 @@ public class Member extends JPanel {
 		//=================================
 	}
 	protected void deleteRecord() {
+		int result = JOptionPane.showConfirmDialog(null, "정말 탈퇴하시겠습니까?", "회원 탈퇴", JOptionPane.YES_NO_OPTION);
+		if(result == JOptionPane.YES_OPTION) {
+			if(isCorrect()) { // 암호가 일치하면
+				//=================================
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
+			
+					String sql = "DELETE FROM memberTBL WHERE id=?";
+					
+					PreparedStatement pstmt = con.prepareStatement(sql);
+					
+					pstmt.setString(1, tfId.getText());
+					
+					if(pstmt.executeUpdate() >= 0) {
+						JOptionPane.showMessageDialog(null, "탈퇴하셨습니다.");
+					} else {
+						JOptionPane.showMessageDialog(null, "오류!");
+					}
+					
+				} catch (ClassNotFoundException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				//=================================
+			} else {
+				JOptionPane.showMessageDialog(null, "비밀번호가 틀렸습니다");
+			}
+		}
+	}
+		
+	private boolean isCorrect() {
 		//=================================
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
-
-			String sql = "DELETE FROM memberTBL WHERE id=?";
+	
+			String sql = "SELECT password FROM memberTBL WHERE id=?";
 			
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			
 			pstmt.setString(1, tfId.getText());
 			
-			if(pstmt.executeUpdate() >= 0) {
-				JOptionPane.showMessageDialog(null, "탈퇴하셨습니다.");
+			ResultSet rs = pstmt.executeQuery();
+			String tablePw = "";
+			while(rs.next()) {
+				tablePw = rs.getString("password");
+			}
+			String userPw = new String(tfPassword.getPassword());
+			if(userPw.equals(tablePw)) {
+				return true;
 			} else {
-				JOptionPane.showMessageDialog(null, "오류!");
+				return false;
 			}
 			
 		} catch (ClassNotFoundException | SQLException e1) {
@@ -425,6 +512,7 @@ public class Member extends JPanel {
 			e1.printStackTrace();
 		}
 		//=================================
+		return true;
 	}
 	protected void insertRecord() {
 		//=================================
@@ -472,10 +560,13 @@ public class Member extends JPanel {
 		this();
 		if(type == 1) {
 			btnMemberChoice.setText("회원 가입");
+			btnDup.setVisible(true);
 		} else if(type == 2) {
 			btnMemberChoice.setText("회원 탈퇴");
+			btnDup.setVisible(false);
 		} else if(type == 3) {
 			btnMemberChoice.setText("회원 정보 변경");
+			btnDup.setVisible(false);
 		} else if(type == 4) {
 			btnMemberChoice.setText("회원 검색");
 		}
