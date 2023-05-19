@@ -62,6 +62,15 @@ public class Member extends JPanel {
 	private String sEmail;
 	private JLabel lblPic;
 	private JButton btnDup;
+	private int lsType;
+	private String strAddress;
+	private String strBirth;
+	private String strMobile;
+	private String strName;
+	private String strId;
+	private String strEmail;
+	private String newPath;
+	private Object oldPath;
 	
 	/**
 	 * Create the dialog.
@@ -73,6 +82,7 @@ public class Member extends JPanel {
 		
 		lblPic = new JLabel("");
 		lblPic.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount() == 2) {
@@ -89,6 +99,8 @@ public class Member extends JPanel {
 			            icon = new ImageIcon(image);
 			            lblPic.setIcon(icon);
 			            filePath = filePath.replaceAll("\\\\", "\\\\\\\\");
+			            
+			            newPath = filePath;
 					}
 				}
 			}
@@ -369,16 +381,65 @@ public class Member extends JPanel {
 				} else if(number == 2) {
 					deleteRecord();
 				} else if(number == 3) {
-					
+					if(isChanged()) {
+						updateRecord();
+					}
 				} else if(number == 4) {
 					
 				}
 			}
 		});
-		btnMemberChoice.setBounds(224, 329, 97, 32);
+		btnMemberChoice.setBounds(211, 329, 130, 32);
 		add(btnMemberChoice);
 
 	}
+	protected void updateRecord() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
+			Statement stmt = con.createStatement();
+			
+			String sql = "update memberTBL set name='" + tfName.getText() + "', email='";
+			sql = sql + tfEmail.getText() + "@" + cbEmail.getSelectedItem() + "', mobile='";
+			sql = sql + tfMobile.getText() + "', birth='" + tfBirth.getText() + "', address='";			
+			sql = sql + tfAddress.getText() + tfAddressDetail.getText() + "', pic='";
+			sql = sql + filePath + "', lstype=";
+			sql = sql + (chkSolarLunar.isSelected() ? 1 : 0) + " where id='";
+			sql = sql + tfId.getText() + "'";
+			
+			if(stmt.executeUpdate(sql) >= 0) {
+				JOptionPane.showMessageDialog(null, "변경되었습니다.");
+			} else {
+				JOptionPane.showMessageDialog(null, "오류!");
+			}
+			
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//=================================
+	}
+	protected boolean isChanged() {
+		boolean bChanged = false;		
+		int value = chkSolarLunar.isSelected() ? 1 : 0;
+		
+		if(!strName.equals(tfName.getText()))
+			bChanged = true;
+		else if(!strMobile.equals(tfMobile.getText()))
+			bChanged = true;
+		else if(!strBirth.equals(tfBirth.getText()))
+			bChanged = true;
+		else if(!strAddress.equals(tfAddress.getText() + tfAddressDetail.getText()))
+			bChanged = true;
+		else if(!strEmail.equals(tfEmail.getText() + "@" + cbEmail.getSelectedItem()))
+			bChanged = true;			
+		else if(!oldPath.equals(newPath))
+			bChanged = true;
+		else if(value != lsType)
+			bChanged = true;
+		return bChanged;
+	}
+	
 	protected boolean isDup() {
 		//=================================
 		try {
@@ -420,23 +481,35 @@ public class Member extends JPanel {
 			
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				tfId.setText(rs.getString("id"));
+				strId = rs.getString("id");
+				tfId.setText(strId);
 				//tfPassword는 삭제를 결정했을 때 인증 수단으로 써 보자.
-				tfName.setText(rs.getString("name"));
-				tfMobile.setText(rs.getString("mobile"));
-				tfBirth.setText(rs.getString("birth"));
-				tfAddress.setText(rs.getString("address"));
-				if(rs.getInt("lsType") == 0) {
+				strName = rs.getString("name");
+				tfName.setText(strName);
+				
+				strMobile = rs.getString("mobile");
+				tfMobile.setText(strMobile);
+				
+				strBirth = rs.getString("birth");
+				tfBirth.setText(strBirth);
+				
+				strAddress = rs.getString("address");
+				tfAddress.setText(strAddress);
+				
+				lsType = rs.getInt("lsType");
+				if(lsType == 0) {
 					chkSolarLunar.setSelected(false);
 				} else {
 					chkSolarLunar.setSelected(true);
 				}
 				
-				String temp = rs.getString("email");
-				tfEmail.setText(temp.substring(0, temp.indexOf("@")));
-				cbEmail.setSelectedItem(temp.substring(temp.indexOf("@")+1));
+				strEmail = rs.getString("email");
+				tfEmail.setText(strEmail.substring(0, strEmail.indexOf("@")));
+				cbEmail.setSelectedItem(strEmail.substring(strEmail.indexOf("@")+1));
 				
 				filePath = rs.getString("pic");
+				oldPath = filePath;
+				
 				ImageIcon icon = new ImageIcon(filePath);
 				Image image = icon.getImage();
 				image = image.getScaledInstance(150, 200, Image.SCALE_SMOOTH);
@@ -595,4 +668,5 @@ public class Member extends JPanel {
 		}
 		return count;
 	}
+	
 }

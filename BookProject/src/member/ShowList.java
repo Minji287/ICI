@@ -15,10 +15,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ShowList extends JDialog {
 	private JTable table;
 	private String gID;
+	private int count;
+	
+	
 	public String getID() {
 		return gID;
 	}
@@ -44,6 +49,18 @@ public class ShowList extends JDialog {
 	 * Create the dialog.
 	 */
 	public ShowList() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				if(count == 0) {
+					gID = "test";
+				} else if(count == 1) {
+					String sID = table.getValueAt(0, 0).toString();
+					gID = sID;
+					dispose();
+				}
+			}
+		});
 		setTitle("검색된 이름들");
 		setBounds(100, 100, 858, 571);
 		
@@ -83,12 +100,14 @@ public class ShowList extends JDialog {
 			DefaultTableModel dtm = (DefaultTableModel)table.getModel();
 			dtm.setRowCount(0);
 			
+			count = 0;
 			while(rs.next()) {
 				Vector<String> vector = new Vector<>();
 				for(int i = 1; i <= 4; i++) {
 					vector.add(rs.getString(i));
 				}
 				dtm.addRow(vector);
+				count++;
 			}
 			
 		} catch (ClassNotFoundException | SQLException e1) {
