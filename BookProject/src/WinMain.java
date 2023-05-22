@@ -421,7 +421,7 @@ public class WinMain extends JDialog {
 					strISBN = table.getValueAt(row, 0).toString();
 				}				
 				
-				WinRentalSearch winRentalSearch = new WinRentalSearch();
+				WinRentalSearch winRentalSearch = new WinRentalSearch(1, strISBN); // 대여
 				winRentalSearch.setModal(true);
 				winRentalSearch.setVisible(true);
 				
@@ -442,7 +442,7 @@ public class WinMain extends JDialog {
 					strISBN = table.getValueAt(row, 0).toString();
 				}				
 				
-				WinRentalSearch winRentalSearch = new WinRentalSearch();
+				WinRentalSearch winRentalSearch = new WinRentalSearch(2, strISBN); // 반납
 				winRentalSearch.setModal(true);
 				winRentalSearch.setVisible(true);
 				

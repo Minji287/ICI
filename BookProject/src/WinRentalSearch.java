@@ -89,13 +89,54 @@ public class WinRentalSearch extends JDialog {
 
 	}
 
+	public WinRentalSearch(int num, String sISBN) {
+		this();
+		if(num == 2) { // 반납
+			lblCondition.setVisible(false);
+			cbCondition.setVisible(false);
+			tfConditionValue.setVisible(false);
+			
+			showReturnList(sISBN);
+		}
+	}
+
+	private void showReturnList(String sISBN) {
+		String cols[] = {"ID","이름","전화번호","이메일","주소"};
+		DefaultTableModel dtm = new DefaultTableModel(cols,0);
+		table.setModel(dtm);
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
+			Statement stmt = con.createStatement();
+			
+			// 책 isbn을 이용하여 rental에서 빌린 isbn만을 가지고 와서, 그 isbn을 빌린 사람의 정보를 가져온다.
+			String sql = "select distinct M.id, M.name, M.mobile, M.email, M.address from rentalTBL R"
+					+ " inner join bookTBL B "
+					+ "on R.isbn = B.isbn "
+					+ "inner join memberTBL M "
+					+ "on R.id = M.id "
+					+ "where R.bRental=0 and B.isbn='" + sISBN + "'";
+			
+			ResultSet rs = stmt.executeQuery(sql);			
+			while(rs.next()) {
+				Vector<String> vector = new Vector<>();
+				vector.add(rs.getString("M.id"));
+				vector.add(rs.getString("M.name"));
+				vector.add(rs.getString("M.mobile"));
+				vector.add(rs.getString("M.email"));
+				vector.add(rs.getString("M.address"));
+				dtm.addRow(vector);
+			}
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 	protected void showRecords() {
 		String cols[] = {"ID","이름","전화번호","이메일","주소"};
 		DefaultTableModel dtm = new DefaultTableModel(cols,0);
 		table.setModel(dtm);
-		
-		
-		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");						
