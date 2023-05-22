@@ -6,13 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import javax.swing.table.DefaultTableModel;
+
 import com.thehowtotutorial.splashscreen.JSplash;
 
 
 public class Splash {
    
-   public static void main(String[] args) throws InterruptedException {
-      JSplash splash = new JSplash(Splash.class.getResource("images.jpg"),
+   private static DefaultTableModel dtm;
+
+public static void main(String[] args) throws InterruptedException {
+      JSplash splash = new JSplash(Splash.class.getResource("image/images.jpg"),
             true,true,false,"V1",null, Color.YELLOW, Color.BLUE);
       splash.splashOn();
       //================================
@@ -21,13 +25,30 @@ public class Splash {
          Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sqlDB","root","1234");                  
          Statement stmt = con.createStatement();
          
-         String sql = "select * from bookTBL order by title asc";
+         String sql = "select * from bookTBL";
          ResultSet rs = stmt.executeQuery(sql);
+         int totalNumber = 0;
+         while(rs.next()) {
+        	 totalNumber++;
+         }
+         System.out.println("전체 레코드 수: " + totalNumber);
+         
+         sql = "select * from bookTBL order by title asc";
+         rs = stmt.executeQuery(sql);
+         String columnNames[] = {"ISBN", "제목", "저자", "출판사", "이미지URL", "출판일", "가격", "책소개"};
+         dtm = new DefaultTableModel(columnNames, 0);
+         
          int num=0;
          while(rs.next()) {
-            splash.setProgress(num,rs.getString("title"));
+        	num++;
+            splash.setProgress(100*num/totalNumber, rs.getString("title"));
             Thread.sleep(10);
-            num++;
+            
+            Vector<String> vector = new Vector<>();
+            for(int i = 0; i < columnNames.length; i ++) {
+            	vector.add(rs.getString(i+1));
+            }
+            dtm.addRow(vector);
          }
       } catch (ClassNotFoundException | SQLException e1) {
          // TODO Auto-generated catch block
@@ -37,7 +58,7 @@ public class Splash {
       
       splash.splashOff();
       
-      WinMain winMain = new WinMain();
+      WinMain winMain = new WinMain(dtm);
       winMain.setModal(true);
       winMain.setVisible(true);
    }
