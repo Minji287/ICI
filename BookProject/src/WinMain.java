@@ -448,8 +448,9 @@ public class WinMain extends JDialog {
 				
 				// id가 날라오면 rentalTBL에 bRental 1로 바꾸기			
 				String strID = winRentalSearch.getID();
-				
-				updateRecord(strISBN, strID);
+				if(!strID.equals("")) {
+					updateRecord(strISBN, strID);
+				}
 			}
 		});
 		popupMenu.add(mnuReturn);
