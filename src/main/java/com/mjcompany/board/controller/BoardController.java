@@ -63,9 +63,14 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/questionContentView/{id}")
-	public String questionView(@PathVariable("id") Integer id) {
+	public String questionView(@PathVariable("id") Integer id, Model model) {
 		
 //		System.out.println(id); // 질문 리스트에서 유저가 클릭한 글의 번호
+		
+		Question question = questionService.getQuestion(id);
+		
+		model.addAttribute("question", question);
+		
 		return "question_view";
 	}
 }
