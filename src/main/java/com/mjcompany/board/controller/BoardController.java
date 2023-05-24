@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.mjcompany.board.dto.AnswerForm;
 import com.mjcompany.board.dto.QuestionForm;
 import com.mjcompany.board.entity.Question;
+import com.mjcompany.board.repository.MemberForm;
 import com.mjcompany.board.repository.QuestionRepository;
 import com.mjcompany.board.service.AnswerService;
+import com.mjcompany.board.service.MemberService;
 import com.mjcompany.board.service.QuestionService;
 
 @Controller
@@ -30,6 +32,9 @@ public class BoardController {
 	
 	@Autowired
 	private AnswerService answerService;
+	
+	@Autowired
+	private MemberService memberService;
 	
 	@RequestMapping(value = "/")
 	public String form() {
@@ -100,5 +105,27 @@ public class BoardController {
 		answerService.answerCreate(answerForm.getContent(), question);
 		
 		return String.format("redirect:/questionContentView/%s", id);
+	}
+	
+	@GetMapping(value = "/memberJoin")
+	public String memberJoinForm(MemberForm memberForm) {
+		return "member_join";
+	}
+	
+	@PostMapping(value = "/memberJoin")
+	public String memberJoin(@Valid MemberForm memberForm, BindingResult bindingResult) {
+		
+		if(bindingResult.hasErrors()) {
+			return "member_join";
+		}
+		
+		if(!memberForm.getUserpw1().equals(memberForm.getUserpw2())) {
+			bindingResult.rejectValue("userpw2", "passwordCheckIncorrect", "비밀번호가 일치하지 않습니다.");
+			return "member_join";
+		}
+		
+		memberService.memberJoin(memberForm.getUserid(), memberForm.getUserpw1(), memberForm.getEmail());
+		
+		return "redirect:index";
 	}
 }
