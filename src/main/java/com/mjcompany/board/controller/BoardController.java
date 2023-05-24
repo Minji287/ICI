@@ -43,12 +43,7 @@ public class BoardController {
 	@RequestMapping(value = "/questionCreate")
 	public String create(HttpServletRequest request) {
 		
-		Question question = new Question();
-		question.setSubject(request.getParameter("subject"));
-		question.setContent(request.getParameter("content"));
-		question.setCreateDate(LocalDateTime.now()); // 서버의 현재시간 입력
-		
-//		questionRepository.save(question); // insert(질문글 저장)
+		questionService.questionCreate(request.getParameter("subject"), request.getParameter("content"));
 		
 		return "redirect:questionList";
 	}
