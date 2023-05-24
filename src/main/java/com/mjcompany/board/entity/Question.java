@@ -46,7 +46,7 @@ public class Question {
 	private LocalDateTime modifyDate; // 글 수정 일시
 	
 	@OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-	private List<Answer> answersList; // 질문 하나당 답변 여러개(1:n)
+	private List<Answer> answerList; // 질문 하나당 답변 여러개(1:n)
 	
 	@ManyToOne
 	private SiteMember writer; // 글쓴이
