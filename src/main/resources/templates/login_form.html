@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
-<title>질문-답변 게시판</title>
+<title>회원 로그인</title>
 </head>
 <body>
 	<!-- 네비게이션 시작 -->
@@ -29,26 +29,31 @@
   </div>
 </nav>
 	<!-- 네비게이션 끝 -->
-
-
+	
 	<div class="container my-3">
-		<table class="table table-striped">
-			<thead class="table-dark">
-				<tr>
-					<th>번호</th>
-					<th>제목</th>
-					<th>작성일시</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="question:${questionList}">
-					<td th:text="${question.id}"></td>
-					<td><a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a></td>
-					<td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-				</tr>
-			</tbody>
-		</table>
-		<a th:href="@{/questionCreate}" class="btn btn-dark">질문 등록</a>
+		<div class="my-3 border-bottom">
+			<div>
+				<h4>회원 로그인</h4>
+			</div>
+		</div>
+		<form th:action="@{/login}" method="post">
+			<!-- 로그인시 에러 출력 -->
+			<div th:if="${param.error}">
+				<div class="alert alert-danger">
+					로그인 실패! 사용자 아이디 또는 비밀번호를 다시 확인해 주세요.
+				</div>
+			</div>
+			<!-- 로그인시 에러 출력 끝 -->
+			<div class="mb-3">
+				<label for="userid" class="form-label">아이디 : </label>
+				<input class="form-control" type="text" name="userid" id="userid">
+			</div>
+			<div class="mb-3">
+				<label for="userpw" class="form-label">비밀번호 : </label>
+				<input class="form-control" type="password" name="userpw" id="userpw">
+			</div>
+			<input class="btn btn-dark" type="submit" value="로그인">
+		</form>
 	</div>
 </body>
 </html>
