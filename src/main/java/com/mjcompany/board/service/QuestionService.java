@@ -54,4 +54,8 @@ public class QuestionService { // 모듈화와 보안
 		
 		questionRepository.save(question);
 	}
+	
+	public void questionDelete(Integer id) {
+		questionRepository.deleteById(id);
+	}
 }

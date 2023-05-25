@@ -46,4 +46,8 @@ public class AnswerService {
 		
 		answerRepository.save(answer);
 	}
+	
+	public void answerDelete(Integer id) {
+		answerRepository.deleteById(id);
+	}
 }

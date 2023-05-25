@@ -211,6 +211,7 @@ public class BoardController {
 		return "answer_form";
 	}
 	
+	@PreAuthorize("isAuthenticated")
 	@PostMapping(value = "/answerModify/{id}")
 	public String answetModifyOk(@PathVariable("id") Integer id, Principal principal, AnswerForm answerForm, BindingResult bindingResult) {
 
@@ -228,5 +229,24 @@ public class BoardController {
 		
 		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
 	}
-
+	
+	@PreAuthorize("isAuthenticated") // 로그인이 안되어 있으면 login 페이지로 이동시킴
+	@RequestMapping(value = "/questionDelete/{id}")
+	public String questionDelete(@PathVariable("id") Integer id, Principal principal) {
+		
+		questionService.questionDelete(id);
+		
+		return "redirect:/index";
+	}
+	
+	@PreAuthorize("isAuthenticated")
+	@RequestMapping(value = "/answerDelete/{id}")
+	public String answerDelete(@PathVariable("id") Integer id, Principal principal) {
+		
+		Answer answer = answerService.getAnswer(id);
+		
+		answerService.answerDelete(id);
+		
+		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
+	}
 }
