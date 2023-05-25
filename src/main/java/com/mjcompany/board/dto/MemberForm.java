@@ -1,4 +1,4 @@
-package com.mjcompany.board.repository;
+package com.mjcompany.board.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;

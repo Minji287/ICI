@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mjcompany.board.entity.Question;
+import com.mjcompany.board.entity.SiteMember;
 import com.mjcompany.board.exception.DataNotFoundException;
 import com.mjcompany.board.repository.QuestionRepository;
 
@@ -34,12 +35,22 @@ public class QuestionService { // 모듈화와 보안
 		}
 	}
 	
-	public void questionCreate(String subject, String content) {
+	public void questionCreate(String subject, String content, SiteMember writer) {
 		
 		Question question = new Question();
 		question.setSubject(subject);
 		question.setContent(content);
+		question.setWriter(writer);
 		question.setCreateDate(LocalDateTime.now()); // 서버의 현재시간 입력
+		
+		questionRepository.save(question);
+	}
+	
+	public void questionModify(Question question, String subject, String content) {
+		
+		question.setSubject(subject);
+		question.setContent(content);
+		question.setModifyDate(LocalDateTime.now()); // 현재 시간을 가져와서 수정시간으로 입력
 		
 		questionRepository.save(question);
 	}

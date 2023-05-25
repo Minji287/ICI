@@ -19,10 +19,11 @@
           <a class="nav-link active" aria-current="page" href="questionCreate">질문하기</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="login">로그인</a>
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href=@{/login}>로그인</a>
+          <a class="nav-link" sec:authorize="isAuthenticated()" th:href=@{logout}>로그아웃</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="memberJoin">회원가입</a>
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href=@{/memberJoin}>회원가입</a>
         </li>
       </ul>
     </div>
@@ -37,13 +38,18 @@
 				<tr>
 					<th>번호</th>
 					<th>제목</th>
+					<th>글쓴이</th>
 					<th>작성일시</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="question:${questionList}">
 					<td th:text="${question.id}"></td>
-					<td><a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a></td>
+					<td>
+						<a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a>
+						<span class="text-secondary small ms-2" th:if="${#lists.size(question.answerList) > 0}" th:text="${#lists.size(question.answerList)}"></span>
+					</td>
+					<td><span th:if="${question.writer != null}" th:text="${question.writer.userid}"></span></td>
 					<td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 				</tr>
 			</tbody>

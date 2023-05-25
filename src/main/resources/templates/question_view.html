@@ -19,10 +19,11 @@
           <a class="nav-link active" aria-current="page" href="questionCreate">질문하기</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="login">로그인</a>
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href=@{/login}>로그인</a>
+          <a class="nav-link" sec:authorize="isAuthenticated()" th:href=@{logout}>로그아웃</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="memberJoin">회원가입</a>
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href=@{/memberJoin}>회원가입</a>
         </li>
       </ul>
     </div>
@@ -38,8 +39,16 @@
 				<div class="card-text" style="white-space: pre-line" th:text="${question.content}"></div>
 				<div class="d-flex justify-content-end">
 					<div class="badge text-bg-dark p-2 text-start">
+						<div class="mb-2">
+							<span th:if="${question.writer != null}" th:text=${question.writer.userid}></span>
+						</div>
 						<div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
 					</div>
+				</div>
+				<div class="my-3">
+					<a th:href="@{|/questionModify/${question.id}|}" class="btn btn-outline-primary" 
+               			sec:authorize="isAuthenticated()" th:if="${question.writer != null and #authentication.getPrincipal().getUsername() == question.writer.userid}"
+               			th:text="수정"></a>
 				</div>
 			</div>
 		</div>
@@ -53,9 +62,17 @@
 				<div class="card-text" style="white-space: pre-line" th:text="${answer.content}"></div>
 					<div class="d-flex justify-content-end">
 						<div class="badge text-bg-dark p-2 text-start">
+							<div class="mb-2">
+								<span th:if="${answer.writer != null}" th:text=${answer.writer.userid}></span>
+							</div>
 							<div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
 						</div>
 					</div>
+				<div class="my-3">
+					<a th:href="@{|/answerModify/${answer.id}|}" class="btn btn-outline-primary" 
+               			sec:authorize="isAuthenticated()" th:if="${answer.writer != null and #authentication.getPrincipal().getUsername() == answer.writer.userid}"
+               			th:text="수정"></a>
+				</div>
 			</div>
 		</div>
 		<!-- 답변 리스트 끝 -->

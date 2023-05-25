@@ -1,5 +1,6 @@
 package com.mjcompany.board.controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,11 +18,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.mjcompany.board.dto.AnswerForm;
+import com.mjcompany.board.dto.MemberForm;
 import com.mjcompany.board.dto.QuestionForm;
 import com.mjcompany.board.entity.Question;
-import com.mjcompany.board.repository.MemberForm;
+import com.mjcompany.board.entity.SiteMember;
 import com.mjcompany.board.repository.QuestionRepository;
 import com.mjcompany.board.service.AnswerService;
 import com.mjcompany.board.service.MemberService;
@@ -47,22 +52,27 @@ public class BoardController {
 		return "redirect:questionList";
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/question_form")
 	public String question_form() {
 		return "question_form";
 	}
 	
+	@PreAuthorize("isAuthenticated()") // 로그인이 안되어 있으면 login 페이지로 이동
 	@PostMapping(value = "/questionCreate") // post만 받음
-	public String create(@Valid QuestionForm questionForm, BindingResult bindingResult) {
+	public String create(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
 		
 		if(bindingResult.hasErrors()) {
 			return "question_form";
 		}
-		questionService.questionCreate(questionForm.getSubject(), questionForm.getContent());
+		// principal.getName() -> 현재 로그인 중인 유저의 username 가져오기
+		SiteMember siteMember = memberService.getMember(principal.getName());
+		questionService.questionCreate(questionForm.getSubject(), questionForm.getContent(), siteMember);
 		
 		return "redirect:questionList";
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping(value = "/questionCreate")
 	public String questionCreate(QuestionForm questionForm) {
 		return "question_form";
@@ -93,8 +103,9 @@ public class BoardController {
 		return "question_view";
 	}
 	
+	@PreAuthorize("isAuthenticated")
 	@RequestMapping(value = "/answerCreate/{id}")
-	public String answerCreate(Model model, @PathVariable("id") Integer id, @Valid AnswerForm answerForm, BindingResult bindingResult) {
+	public String answerCreate(Model model, @PathVariable("id") Integer id, @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
 		
 		Question question = questionService.getQuestion(id);
 		
@@ -103,7 +114,8 @@ public class BoardController {
 			return "question_view";
 		}
 		
-		answerService.answerCreate(answerForm.getContent(), question);
+		SiteMember siteMember = memberService.getMember(principal.getName());
+		answerService.answerCreate(answerForm.getContent(), question, siteMember);
 		
 		return String.format("redirect:/questionContentView/%s", id);
 	}
@@ -144,5 +156,41 @@ public class BoardController {
 	@GetMapping(value = "/login")
 	public String login() {
 		return "login_form";
+	}
+	
+	@PreAuthorize("isAuthenticated")
+	@GetMapping(value = "/questionModify/{id}")
+	public String questionModify(@PathVariable("id") Integer id, Principal principal, QuestionForm questionForm) {
+		
+		Question question = questionService.getQuestion(id); // 질문 글 번호로 검색해서 해당 객체 가져오기
+		
+		// 해당 질문의 글쓴이와 현재 로그인중인 유저의 아이디가 다르면
+		if(!question.getWriter().getUserid().equals(principal.getName())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다.");
+		}
+		
+		questionForm.setSubject(question.getSubject());
+		questionForm.setContent(question.getContent());
+		
+		return "question_form";
+	}
+	
+	@PreAuthorize("isAuthenticated")
+	@PostMapping(value = "/questionModify/{id}")
+	public String questionModifyOk(@PathVariable("id") Integer id, Principal principal, @Valid QuestionForm questionForm, BindingResult bindingResult) {
+
+		if(bindingResult.hasErrors()) {
+			return "question_form";
+		}
+		Question question = questionService.getQuestion(id);
+		
+		// 해당 질문의 글쓴이와 현재 로그인중인 유저의 아이디가 다르면
+		if(!question.getWriter().getUserid().equals(principal.getName())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다.");
+		}
+		
+		questionService.questionModify(question, questionForm.getSubject(), questionForm.getContent());
+		
+		return String.format("redirect:/questionContentView/%s", id);
 	}
 }

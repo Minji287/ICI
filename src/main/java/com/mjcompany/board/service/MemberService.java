@@ -1,7 +1,10 @@
 package com.mjcompany.board.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mjcompany.board.entity.SiteMember;
@@ -12,6 +15,9 @@ public class MemberService {
 	
 	@Autowired
 	private SiteMemberRepository siteMemberRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public SiteMember memberJoin(String userid, String userpw, String email) {
 		
@@ -26,6 +32,14 @@ public class MemberService {
 		siteMember.setEmail(email);
 		
 		siteMemberRepository.save(siteMember);
+		
+		return siteMember;
+	}
+	
+	public SiteMember getMember(String userid) {
+		
+		Optional<SiteMember> optSiteMember = siteMemberRepository.findByUserid(userid);
+		SiteMember siteMember = optSiteMember.get();
 		
 		return siteMember;
 	}
