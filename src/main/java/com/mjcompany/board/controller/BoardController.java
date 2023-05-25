@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.mjcompany.board.dto.AnswerForm;
 import com.mjcompany.board.dto.MemberForm;
 import com.mjcompany.board.dto.QuestionForm;
+import com.mjcompany.board.entity.Answer;
 import com.mjcompany.board.entity.Question;
 import com.mjcompany.board.entity.SiteMember;
 import com.mjcompany.board.repository.QuestionRepository;
@@ -193,4 +194,39 @@ public class BoardController {
 		
 		return String.format("redirect:/questionContentView/%s", id);
 	}
+	
+	@PreAuthorize("isAuthenticated")
+	@GetMapping(value = "/answerModify/{id}")
+	public String answetModify(@PathVariable("id") Integer id, Principal principal, AnswerForm answerForm) {
+
+		Answer answer = answerService.getAnswer(id);
+		
+		// 해당 답변의 글쓴이와 현재 로그인중인 유저의 아이디가 다르면
+		if(!answer.getWriter().getUserid().equals(principal.getName())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 답변에 대한 수정 권한이 없습니다.");
+		}
+		
+		answerForm.setContent(answer.getContent()); // answerForm에 기존 답변 글 내용 넣기
+		
+		return "answer_form";
+	}
+	
+	@PostMapping(value = "/answerModify/{id}")
+	public String answetModifyOk(@PathVariable("id") Integer id, Principal principal, AnswerForm answerForm, BindingResult bindingResult) {
+
+		if(bindingResult.hasErrors()) {
+			return "answer_form";
+		}
+		Answer answer = answerService.getAnswer(id);
+		
+		// 해당 답변의 글쓴이와 현재 로그인중인 유저의 아이디가 다르면
+		if(!answer.getWriter().getUserid().equals(principal.getName())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 답변에 대한 수정 권한이 없습니다.");
+		}
+		
+		answerService.answerModify(answer, answerForm.getContent());
+		
+		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
+	}
+
 }
