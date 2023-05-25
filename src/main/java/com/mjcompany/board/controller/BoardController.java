@@ -249,4 +249,32 @@ public class BoardController {
 		
 		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
 	}
+	
+	@PreAuthorize("isAuthenticated")
+	@RequestMapping(value = "/questionLike/{id}")
+	public String questionLike(@PathVariable("id") Integer id, Principal principal) {
+		
+		Question question = questionService.getQuestion(id);
+		
+		// 현재 로그인중인 유저 정보(객체) 가져오기
+		SiteMember siteMember = memberService.getMember(principal.getName());
+		
+		questionService.questionLike(question, siteMember);
+		
+		return String.format("redirect:/questionContentView/%s", id);
+	}
+	
+	@PreAuthorize("isAuthenticated")
+	@RequestMapping(value = "/answerLike/{id}")
+	public String answerLike(@PathVariable("id") Integer id, Principal principal) {
+		
+		Answer answer = answerService.getAnswer(id);
+		
+		// 현재 로그인중인 유저 정보(객체) 가져오기
+		SiteMember siteMember = memberService.getMember(principal.getName());
+		
+		answerService.answerLike(answer, siteMember);
+		
+		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
+	}
 }

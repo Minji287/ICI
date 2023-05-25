@@ -46,6 +46,10 @@
 					</div>
 				</div>
 				<div class="my-3">
+					<a th:href="@{|/questionLike/${question.id}|}" class="btn btn-dark" 
+               			sec:authorize="isAuthenticated()" th:if="${question.writer != null and #authentication.getPrincipal().getUsername() != question.writer.userid}">
+               			좋아요 <span class="badge text-bg-light" th:text="${#lists.size(question.liker)}"></span>
+               			</a>
 					<a th:href="@{|/questionModify/${question.id}|}" class="btn btn-outline-secondary" 
                			sec:authorize="isAuthenticated()" th:if="${question.writer != null and #authentication.getPrincipal().getUsername() == question.writer.userid}"
                			th:text="수정"></a>
@@ -72,6 +76,10 @@
 						</div>
 					</div>
 				<div class="my-3">
+					<a th:href="@{|/answerLike/${answer.id}|}" class="btn btn-dark" 
+               			sec:authorize="isAuthenticated()" th:if="${answer.writer != null and #authentication.getPrincipal().getUsername() != answer.writer.userid}">
+               			좋아요 <span class="badge text-bg-light" th:text="${#lists.size(answer.liker)}"></span>
+               			</a>
 					<a th:href="@{|/answerModify/${answer.id}|}" class="btn btn-outline-secondary" 
                			sec:authorize="isAuthenticated()" th:if="${answer.writer != null and #authentication.getPrincipal().getUsername() == answer.writer.userid}"
                			th:text="수정"></a>

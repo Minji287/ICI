@@ -50,4 +50,11 @@ public class AnswerService {
 	public void answerDelete(Integer id) {
 		answerRepository.deleteById(id);
 	}
+	
+	public void answerLike(Answer answer, SiteMember siteMember) {
+		// 좋아요를 누른 질문글의 객체의 liker를 가져와서 현재 로그인 중인 siteMember 객체를 추가 해줌
+		answer.getLiker().add(siteMember);
+		
+		answerRepository.save(answer);
+	}
 }
