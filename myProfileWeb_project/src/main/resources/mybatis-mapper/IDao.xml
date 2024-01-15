@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="com.mjcompany.home.dao.IDao">
+
+	<insert id="joinDao">
+		INSERT INTO web_member(mid, mpw, mname, memail) VALUES (#{param1}, #{param2}, #{param3}, #{param4})
+	</insert>
+	
+	<select id="checkIdDao" resultType="int">
+		SELECT COUNT(*) FROM web_member WHERE mid=#{param1} 
+	</select>
+	
+	<select id="checkIdPwDao" resultType="int">
+		SELECT COUNT(*) FROM web_member WHERE mid=#{param1} AND mpw=#{param2} 
+	</select>
+	
+	<select id="getMemberInfo" resultType="com.mjcompany.home.dto.MemberDto">
+		SELECT * FROM web_member WHERE mid=#{param1}
+	</select>
+	
+	<update id="modifyMemberDao">
+		UPDATE web_member SET mpw=#{param2}, mname=#{param3}, memail=#{param4} WHERE mid=#{param1}
+	</update>
+	
+	<insert id="questionWriteDao">
+		INSERT INTO web_board(bnum, bid, bname, bcontent, bemail) VALUES (webboard_seq.nextval, #{param1}, #{param2}, #{param3}, #{param4})
+	</insert>
+	
+	<select id="questionListDao" resultType="com.mjcompany.home.dto.BoardDto">
+		SELECT * FROM <!-- param1 = amount는 한 페이지당 보이는 글의 개수 -->
+			(SELECT A.*, FLOOR(((ROWNUM-1) / #{param1}) + 1)PAGE, ROWNUM
+				FROM
+					(SELECT * from web_board ORDER BY bnum DESC)A)
+						WHERE PAGE=#{param2}
+	</select>
+	
+	<select id="contentViewDao" resultType="com.mjcompany.home.dto.BoardDto">
+		SELECT * FROM web_board WHERE bnum=${param1}
+	</select>
+	
+	<delete id="deleteDao">
+		DELETE FROM web_board WHERE bnum=${param1}
+	</delete>
+	
+	<select id="boardAllCountDao" resultType="int">
+		SELECT COUNT(*) FROM web_board
+	</select>
+	
+</mapper>
