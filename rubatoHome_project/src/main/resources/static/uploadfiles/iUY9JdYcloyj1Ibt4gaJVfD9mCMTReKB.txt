@@ -1,0 +1,16 @@
+iciNaver API
+Client ID: QhYs_AQWNNgOfQNJ2Zdk
+Client Secret: 6wc9LzBoQJ
+
+kakao ICI_BIGDATA
+REST API 키
+7b6ec971cf0970db282568126898cf3a
+
+GET /v2/search/image
+Host: dapi.kakao.com
+Authorization: KakaoAK ${REST_API_KEY}
+
+https://kauth.kakao.com/oauth/authorize?client_id=7b6ec971cf0970db282568126898cf3a&response_type=code&redirect_uri=https://localhost.com
+
+token
+FbRvGkGVtlOL3Qf8A3MlbQN5p7F6QDKtYA36_Zmsz5UF1qfKpl540XhFbqQJDBu_i0st3go9dRkAAAGH-T_4Sg
