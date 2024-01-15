@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+<title>질문-답변 게시판</title>
+</head>
+<body>
+	<!-- 네비게이션 시작 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">JPA Q/A BOARD</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/questionCreate}">질문하기</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/memberJoin}">회원가입</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+	<!-- 네비게이션 끝 -->
+
+
+	<div class="container my-3">
+		<table class="table table-striped">
+			<thead class="table-dark">
+				<tr>
+					<th>번호</th>
+					<th>제목</th>
+					<th>글쓴이</th>
+					<th>작성일시</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="question:${questionList}">
+					<td th:text="${question.id}"></td>
+					<td>
+						<a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a>
+						<span class="text-secondary small ms-2" th:if="${#lists.size(question.answerList) > 0}" th:text="${#lists.size(question.answerList)}"></span>
+					</td>
+					<td><span th:if="${question.writer != null}" th:text="${question.writer.userid}"></span></td>
+					<td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<a th:href="@{/questionCreate}" class="btn btn-dark">질문 등록</a>
+	</div>
+</body>
+</html>
