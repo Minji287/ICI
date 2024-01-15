@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>반복문 연습</title>
+</head>
+<body>
+	<span th:each="dto, status:${memberDtos}">
+		<p th:text="$dto.name"></p>
+		<p th:text="$dto.age"></p>
+	</span>
+</body>
+</html>

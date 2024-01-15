@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/content.css}">
+<script type="text/javascript"src="/js/vali.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>안녕하세요!! 저는 타임리프입니다!</h2>
+	<span class="hellotext" th:text="${data}"></span> <!-- 모델에서 넘겨준 이름 -->
+	<img th:src="@{/img/images.jpg}"><br><br>
+	
+	회원 이름: <span th:text="${memberDto.name}"></span><br>
+	회원 나이: <span th:text="${memberDto.age}"></span><br>
+</body>
+</html>
